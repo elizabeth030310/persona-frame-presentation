@@ -7,7 +7,7 @@ const SLIDES = [
     subtitle: "주간 진행 상황 보고",
     title: "Persona Frame",
     highlight: "4주차 발표",
-    info: ["Team: Persona-frame", "김규민 | 신준수 | 유승민", "2026. 03. 18"],
+    info: ["Team: Persona-frame", "김규민 | 신준수 | 유승민", "2026. 03. 25"],
   },
   // Slide 1: 진행 현황
   {
@@ -15,94 +15,137 @@ const SLIDES = [
     title: "이번 주 주요 진행 현황",
     cards: [
       { icon: "📦", title: "기술 스택 최종 확정", desc: "프로젝트 전체 기술 스택 결정 및 선정 근거 정리", color: "#4F46E5" },
-      { icon: "⚙️", title: "시스템 아키텍처 설계", desc: "음성 파이프라인 및 서비스 간 통신 구조 설계", color: "#6366F1" },
       { icon: "🎨", title: "UI 프로토타입 제작", desc: "웹 대기 화면, AI 활성 화면, 모바일 앱 디자인", color: "#06B6D4" },
       { icon: "🤖", title: "캐릭터 디자인 확정", desc: "AI 마스코트 '퍼비' 캐릭터 상태별 디자인", color: "#10B981" },
     ],
   },
-  // Slide 2: 기술 스택
+  // Slide 2: 기술 스택 - Frontend
   {
-    type: "table",
-    title: "기술 스택 확정",
-    rows: [
-      { category: "Frontend", tech: "React + Vite", desc: "키오스크 디스플레이 UI" },
-      { category: "Backend", tech: "FastAPI (Python)", desc: "REST API + WebSocket 서버" },
-      { category: "AI", tech: "Gemini-2.5-flash", desc: "자연어 처리 및 대화형 AI" },
-      { category: "STT", tech: "faster-whisper", desc: "음성 → 텍스트 변환" },
-      { category: "Wake Word", tech: "Porcupine", desc: '"퍼비야" 호출어 감지' },
-      { category: "TTS", tech: "Gemini-2.5-flash-TTS", desc: "텍스트 → 음성 변환" },
-      { category: "Mobile", tech: "Flutter", desc: "크로스 플랫폼 앱 개발" },
-      { category: "DB", tech: "PostgreSQL + pgvector", desc: "벡터 검색 지원 데이터베이스" },
-      { category: "Hardware", tech: "RPi 4 / Jetson Nano", desc: "메인 컨트롤러 + GPIO 제어" },
-      { category: "Mic", tech: "ReSpeaker 2-Mic USB", desc: "음성 입력 마이크 어레이" },
-      { category: "Tools", tech: "Blender + Meshy.ai", desc: "3D 모델링 및 에셋 생성" },
+    type: "techDetail",
+    category: "🌐 Frontend",
+    tech: "React + Vite",
+    points: [
+      "React: 컴포넌트 기반 UI 라이브러리, 재사용성 높음",
+      "Vite: 빠른 빌드 속도, HMR(Hot Module Replacement) 지원",
+      "라즈베리파이 Chromium 키오스크 모드로 전체 화면 표시",
+      "정적 빌드 → FastAPI에서 바로 서빙 가능",
     ],
+    why: "Next.js 대비 SSR/SEO 불필요, 가볍고 빠른 정적 빌드에 최적",
+    color: "#3B82F6",
   },
-  // Slide 3: 기술 선택 이유
+  // Slide 3: 기술 스택 - Backend
   {
-    type: "whytech",
-    title: "왜 이 기술을 선택했을까?",
-    items: [
-      { tech: "React (Not Next.js)", reason: "키오스크 환경에서 SSR/SEO 불필요, 정적 빌드로 가볍게 실행 가능", icon: "⚛️" },
-      { tech: "FastAPI (Not Flask)", reason: "비동기 처리 기본 지원, WebSocket 내장, 자동 API 문서 생성", icon: "⚡" },
-      { tech: "Gemini (Not ChatGPT)", reason: "무료 API 제공, TTS 기능 통합, 한국어 성능 우수", icon: "🤖" },
-      { tech: "PostgreSQL (Not SQLite)", reason: "pgvector로 벡터 검색 지원, 대화 맥락 유사도 검색 가능", icon: "💾" },
-      { tech: "Flutter (Not React Native)", reason: "네이티브 성능, 하나의 코드로 iOS/Android 동시 빌드", icon: "📱" },
+    type: "techDetail",
+    category: "🖥️ Backend",
+    tech: "FastAPI (Python)",
+    points: [
+      "Python 기반 고성능 비동기 웹 프레임워크",
+      "REST API + WebSocket 동시 지원",
+      "자동 API 문서 생성 (Swagger UI)",
+      "모든 요청의 중앙 접점 역할 (API Gateway)",
     ],
+    why: "Flask 대비 비동기 기본 지원, WebSocket 내장, 자동 문서화",
+    color: "#10B981",
   },
-  // Slide 4: 사용 언어 정리
+  // Slide 4: 기술 스택 - AI
   {
-    type: "languages",
-    title: "사용 프로그래밍 언어",
-    langs: [
-      {
-        name: "Python",
-        color: "#3776AB",
-        icon: "🐍",
-        percent: 50,
-        usedIn: ["FastAPI 백엔드 서버", "faster-whisper (STT)", "Porcupine (Wake Word)", "Gemini API 호출 로직", "GPIO 하드웨어 제어"],
-      },
-      {
-        name: "JavaScript",
-        color: "#F7DF1E",
-        textColor: "#1E293B",
-        icon: "🌐",
-        percent: 30,
-        usedIn: ["React + Vite (프론트엔드 UI)", "키오스크 디스플레이 화면", "WebSocket 클라이언트"],
-      },
-      {
-        name: "Dart",
-        color: "#0175C2",
-        icon: "🎯",
-        percent: 20,
-        usedIn: ["Flutter 모바일 앱", "원격 제어 및 설정 관리"],
-      },
+    type: "techDetail",
+    category: "🤖 AI",
+    tech: "Gemini-2.5-flash",
+    points: [
+      "Google의 경량 고성능 LLM 모델",
+      "자연어 이해 및 대화형 응답 생성",
+      "사용자 의도(intent) 파악 → 명령 실행",
+      "무료 API 제공으로 비용 부담 없음",
     ],
+    why: "ChatGPT 대비 무료 API, TTS 통합 지원, 한국어 성능 우수",
+    color: "#8B5CF6",
   },
-  // Slide 5: 기술 간 연결 관계도
+  // Slide 5: 기술 스택 - STT
   {
-    type: "connections",
-    title: "기술 간 연결 관계",
-    subtitle: "각 기술이 어떻게 연결되어 동작하는지",
+    type: "techDetail",
+    category: "🎤 STT (Speech to Text)",
+    tech: "faster-whisper",
+    points: [
+      "OpenAI Whisper 모델의 C++ 최적화 버전",
+      "원본 Whisper 대비 약 4배 빠른 처리 속도",
+      "한국어 음성 인식 정확도 높음",
+      "로컬 실행 → 인터넷 없이도 음성 인식 가능",
+    ],
+    why: "Vosk 대비 한국어 정확도 월등, 로컬 환경에서도 빠른 속도",
+    color: "#6366F1",
   },
-  // Slide 6: 시스템 아키텍처
+  // Slide 6: 기술 스택 - Wake Word
   {
-    type: "architecture",
-    title: "시스템 아키텍처",
-    subtitle: "음성 처리 파이프라인",
-    pipeline: [
-      { label: "마이크 입력", icon: "🎤", color: "#3B82F6" },
-      { label: "Porcupine\nWake Word", icon: "👂", color: "#4F46E5" },
-      { label: "faster-whisper\nSTT", icon: "📝", color: "#6366F1" },
-      { label: "Gemini\n2.5-flash", icon: "🧠", color: "#8B5CF6" },
-      { label: "Gemini\nTTS", icon: "🔊", color: "#06B6D4" },
+    type: "techDetail",
+    category: "👂 Wake Word",
+    tech: "Porcupine",
+    points: [
+      "Picovoice 제공 경량 호출어 감지 엔진",
+      "\"퍼비야\" 커스텀 호출어 등록 가능",
+      "항상 대기하며 호출어만 감지 → 배터리/리소스 절약",
+      "감지 시 faster-whisper 활성화하여 본격 음성 인식 시작",
     ],
-    bottom: [
-      { title: "스피커 출력 + React UI 업데이트", desc: "FastAPI 백엔드가 모든 통신을 중앙에서 관리", color: "#10B981" },
-      { title: "HTTP REST + WebSocket 통신", desc: "프론트엔드 ↔ 백엔드 ↔ 모바일 앱 연동", color: "#6366F1" },
-    ],
+    why: "가볍고 정확한 키워드 감지, 커스텀 호출어 지원",
+    color: "#F59E0B",
   },
-  // Slide 4: 웹 디자인 - 대기 화면
+  // Slide 7: 기술 스택 - TTS
+  {
+    type: "techDetail",
+    category: "🔊 TTS (Text to Speech)",
+    tech: "Gemini-2.5-flash-TTS",
+    points: [
+      "Gemini AI와 통합된 음성 합성 엔진",
+      "자연스러운 한국어 음성 출력",
+      "AI 응답 텍스트 → 스피커로 음성 전달",
+      "AI와 TTS를 하나의 API로 처리 → 구조 단순화",
+    ],
+    why: "Google TTS 대비 Gemini API 하나로 AI+TTS 통합 처리 가능",
+    color: "#06B6D4",
+  },
+  // Slide 8: 기술 스택 - Mobile
+  {
+    type: "techDetail",
+    category: "📱 Mobile",
+    tech: "Flutter",
+    points: [
+      "Google 개발 크로스 플랫폼 프레임워크 (Dart 언어)",
+      "하나의 코드로 iOS / Android 앱 동시 빌드",
+      "네이티브에 가까운 성능과 부드러운 UI",
+      "FastAPI 서버와 HTTP REST로 통신하여 원격 제어",
+    ],
+    why: "React Native 대비 네이티브 성능 우수, 단일 코드베이스",
+    color: "#0175C2",
+  },
+  // Slide 9: 기술 스택 - DB
+  {
+    type: "techDetail",
+    category: "💾 Database",
+    tech: "PostgreSQL + pgvector",
+    points: [
+      "오픈소스 관계형 데이터베이스 (세계 1위 인기)",
+      "pgvector 확장으로 벡터 유사도 검색 지원",
+      "대화 히스토리 기반 맥락 검색에 활용",
+      "일정, 메모, 설정값, AI 대화 기록 저장",
+    ],
+    why: "SQLite 대비 벡터 검색 지원, 대화 맥락 유사도 분석 가능",
+    color: "#336791",
+  },
+  // Slide 10: 기술 스택 - Hardware
+  {
+    type: "techDetail",
+    category: "🔌 Hardware",
+    tech: "Raspberry Pi 4 / Jetson Nano",
+    points: [
+      "초소형 싱글보드 컴퓨터 (신용카드 크기)",
+      "쿼드코어 CPU + 4GB RAM → 서버 + UI + STT 동시 실행",
+      "GPIO 핀으로 센서, LED 등 하드웨어 직접 제어",
+      "HDMI 모니터 연결 → 디지털 액자 디스플레이",
+    ],
+    why: "소형, 저전력, GPIO 지원으로 스마트홈 디바이스에 최적",
+    color: "#E53E3E",
+  },
+  // Slide: 웹 디자인 - 대기 화면
   {
     type: "design",
     title: "웹 디자인: 대기 화면 (Idle Screen)",
@@ -116,21 +159,7 @@ const SLIDES = [
     ],
     subFeatures: ["6~18시: 밝은 하늘색", "18~6시: 다크 모드"],
   },
-  // Slide 5: 웹 디자인 - AI 활성 화면
-  {
-    type: "design",
-    title: "웹 디자인: AI 활성 화면 (Active Screen)",
-    iframeSrc: "/design.html",
-    features: [
-      "추상적 오브 캐릭터 (중앙)",
-      "회전 링 애니메이션",
-      "대화 텍스트 표시 (유저↔AI)",
-      "빠른 명령어 버튼",
-      "전체 화면 전환 방식",
-    ],
-    subFeatures: ["추후 음성 입력으로 대체"],
-  },
-  // Slide 6: 모바일 디자인
+  // Slide: 모바일 디자인
   {
     type: "mobile",
     title: "모바일 디자인 (Flutter)",
@@ -233,6 +262,35 @@ export default function Presentation() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        );
+
+      case "techDetail":
+        return (
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 80px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "12px" }}>
+              <div style={{ fontSize: "18px", fontWeight: 600, color: slide.color, letterSpacing: "2px", textTransform: "uppercase" }}>{slide.category}</div>
+            </div>
+            <h1 style={{ fontSize: "44px", fontWeight: 800, color: "#F1F5F9", marginBottom: "40px" }}>{slide.tech}</h1>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px", marginBottom: "36px" }}>
+              {slide.points.map((p, i) => (
+                <div key={i} style={{
+                  display: "flex", alignItems: "flex-start", gap: "14px",
+                  animation: `fadeSlideUp 0.4s ease ${i * 0.1}s both`,
+                }}>
+                  <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: slide.color, flexShrink: 0, marginTop: "8px" }} />
+                  <span style={{ fontSize: "20px", color: "#E2E8F0", lineHeight: 1.5 }}>{p}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{
+              padding: "20px 28px", borderRadius: "12px",
+              background: `${slide.color}15`, border: `1px solid ${slide.color}30`,
+              animation: "fadeSlideUp 0.5s ease 0.4s both",
+            }}>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: slide.color, marginBottom: "6px" }}>선택 이유</div>
+              <div style={{ fontSize: "18px", color: "#CBD5E1", lineHeight: 1.5 }}>{slide.why}</div>
             </div>
           </div>
         );
