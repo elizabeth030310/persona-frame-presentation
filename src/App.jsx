@@ -154,7 +154,6 @@ const SLIDES = [
   {
     type: "character",
     title: "캐릭터 디자인: 퍼비 (Perby)",
-    placeholder: "여기에 캐릭터 디자인을\n삽입하세요",
     states: [
       { name: "Idle (대기)", desc: "기본 대기, 숨쉬기 애니메이션", color: "#3B82F6" },
       { name: "Listening (경청)", desc: "음성 입력 대기 중", color: "#10B981" },
@@ -497,10 +496,10 @@ export default function Presentation() {
             <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "32px" }}>{slide.title}</h1>
             <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
               <div style={{
-                flex: "1.5", aspectRatio: "4/3.5", borderRadius: "16px", border: "2px dashed rgba(99,102,241,0.3)",
-                background: "rgba(99,102,241,0.05)", display: "flex", alignItems: "center", justifyContent: "center",
+                flex: "1.5", aspectRatio: "4/3.5", borderRadius: "16px", overflow: "hidden",
+                border: "2px solid rgba(99,102,241,0.3)", background: "#0F0F1A",
               }}>
-                <div style={{ fontSize: "18px", color: "#64748B", textAlign: "center", whiteSpace: "pre-line" }}>{slide.placeholder}</div>
+                <iframe src="/perby-viewer.html" style={{ width: "100%", height: "100%", border: "none" }} title="perby 3d" />
               </div>
               <div style={{ flex: "1" }}>
                 <div style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "28px" }}>캐릭터 상태 (Status)</div>
