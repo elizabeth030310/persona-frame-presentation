@@ -136,10 +136,18 @@ const SLIDES = [
     title: "모바일 디자인 (Flutter)",
     iframeSrc: "/mobile.html",
     features: [
-      { icon: "🖼️", text: "액자 배경화면 및 테마 설정" },
-      { icon: "✏️", text: "AI 비서 이름 커스터마이징" },
-      { icon: "📸", text: "사진 업로드 및 일정 관리" },
-      { icon: "🔄", text: "WebSocket 기반 실시간 동기화" },
+      "디바이스 연결 정보",
+      "날씨",
+      "앱 직접 제어 버튼",
+      "오늘 일정 요약",
+      "AI 처리 결과",
+      "날짜 스트립",
+      "일정 목록",
+      "일정 추가",
+      "디바이스 연동",
+      "배경 사진 업로드",
+      "절전 시간 설정",
+      "알림 설정",
     ],
   },
   // Slide 7: 캐릭터 디자인
@@ -454,27 +462,27 @@ export default function Presentation() {
 
       case "mobile":
         return (
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 80px" }}>
-            <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "32px" }}>{slide.title}</h1>
-            <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 60px" }}>
+            <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "28px" }}>{slide.title}</h1>
+            <div style={{ display: "flex", gap: "36px", alignItems: "center" }}>
               <div style={{
-                flex: "1.8", aspectRatio: "9/16", maxHeight: "75vh", borderRadius: "16px", overflow: "hidden",
+                flex: "1.2", aspectRatio: "9/16", maxHeight: "75vh", borderRadius: "16px", overflow: "hidden",
                 border: "2px solid rgba(99,102,241,0.3)", background: "#000",
               }}>
                 <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none" }} title="mobile preview" />
               </div>
               <div style={{ flex: "1" }}>
-                <div style={{ fontSize: "20px", fontWeight: 600, color: "#94A3B8", marginBottom: "24px" }}>Flutter 크로스 플랫폼 앱 주요 기능</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                <div style={{ fontSize: "18px", fontWeight: 600, color: "#94A3B8", marginBottom: "20px" }}>주요 화면 구성</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   {slide.features.map((f, i) => (
                     <div key={i} style={{
-                      display: "flex", alignItems: "center", gap: "14px",
-                      padding: "16px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.03)",
+                      display: "flex", alignItems: "center", gap: "8px",
+                      padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.03)",
                       border: "1px solid rgba(255,255,255,0.06)",
-                      animation: `fadeSlideUp 0.4s ease ${i * 0.1}s both`,
+                      animation: `fadeSlideUp 0.3s ease ${i * 0.04}s both`,
                     }}>
-                      <div style={{ fontSize: "24px" }}>{f.icon}</div>
-                      <div style={{ fontSize: "16px", color: "#E2E8F0" }}>{f.text}</div>
+                      <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#6366F1", flexShrink: 0 }} />
+                      <div style={{ fontSize: "13px", color: "#E2E8F0" }}>{f}</div>
                     </div>
                   ))}
                 </div>
