@@ -106,7 +106,7 @@ const SLIDES = [
   {
     type: "design",
     title: "웹 디자인: 대기 화면 (Idle Screen)",
-    placeholder: "여기에 대기 화면\n스크린샷을 삽입하세요",
+    iframeSrc: "/design.html",
     features: [
       "실시간 시계 (시:분:초)",
       "날씨 정보 + 주간 예보",
@@ -120,7 +120,7 @@ const SLIDES = [
   {
     type: "design",
     title: "웹 디자인: AI 활성 화면 (Active Screen)",
-    placeholder: "여기에 AI 활성 화면\n스크린샷을 삽입하세요",
+    iframeSrc: "/design.html",
     features: [
       "추상적 오브 캐릭터 (중앙)",
       "회전 링 애니메이션",
@@ -134,7 +134,7 @@ const SLIDES = [
   {
     type: "mobile",
     title: "모바일 디자인 (Flutter)",
-    placeholder: "여기에 모바일 앱\n디자인을 삽입하세요",
+    iframeSrc: "/mobile.html",
     features: [
       { icon: "🖼️", text: "액자 배경화면 및 테마 설정" },
       { icon: "✏️", text: "AI 비서 이름 커스터마이징" },
@@ -424,10 +424,10 @@ export default function Presentation() {
             <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "32px" }}>{slide.title}</h1>
             <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
               <div style={{
-                flex: "1.8", aspectRatio: "16/10", borderRadius: "16px", border: "2px dashed rgba(99,102,241,0.3)",
-                background: "rgba(99,102,241,0.05)", display: "flex", alignItems: "center", justifyContent: "center",
+                flex: "1.8", aspectRatio: "16/10", borderRadius: "16px", overflow: "hidden",
+                border: "2px solid rgba(99,102,241,0.3)", background: "#000",
               }}>
-                <div style={{ fontSize: "18px", color: "#64748B", textAlign: "center", whiteSpace: "pre-line" }}>{slide.placeholder}</div>
+                <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none", transform: "scale(1)", transformOrigin: "0 0" }} title="design preview" />
               </div>
               <div style={{ flex: "1" }}>
                 <div style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "24px" }}>주요 요소</div>
@@ -458,10 +458,10 @@ export default function Presentation() {
             <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "32px" }}>{slide.title}</h1>
             <div style={{ display: "flex", gap: "50px", alignItems: "center" }}>
               <div style={{
-                width: "280px", height: "480px", borderRadius: "24px", border: "2px dashed rgba(99,102,241,0.3)",
-                background: "rgba(99,102,241,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                width: "280px", height: "480px", borderRadius: "24px", overflow: "hidden",
+                border: "2px solid rgba(99,102,241,0.3)", background: "#000", flexShrink: 0,
               }}>
-                <div style={{ fontSize: "16px", color: "#64748B", textAlign: "center", whiteSpace: "pre-line" }}>{slide.placeholder}</div>
+                <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none" }} title="mobile preview" />
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: "20px", fontWeight: 600, color: "#94A3B8", marginBottom: "28px" }}>Flutter 크로스 플랫폼 앱 주요 기능</div>
