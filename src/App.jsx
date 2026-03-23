@@ -27,13 +27,15 @@ const SLIDES = [
     rows: [
       { category: "Frontend", tech: "React + Vite", desc: "키오스크 디스플레이 UI" },
       { category: "Backend", tech: "FastAPI (Python)", desc: "REST API + WebSocket 서버" },
-      { category: "AI", tech: "OpenAI ChatGPT", desc: "자연어 이해 및 응답 생성" },
+      { category: "AI", tech: "Gemini-2.5-flash", desc: "자연어 처리 및 대화형 AI" },
       { category: "STT", tech: "faster-whisper", desc: "음성 → 텍스트 변환" },
       { category: "Wake Word", tech: "Porcupine", desc: '"퍼비야" 호출어 감지' },
-      { category: "TTS", tech: "Google TTS", desc: "텍스트 → 음성 변환" },
+      { category: "TTS", tech: "Gemini-2.5-flash-TTS", desc: "텍스트 → 음성 변환" },
       { category: "Mobile", tech: "Flutter", desc: "크로스 플랫폼 앱 개발" },
-      { category: "DB", tech: "SQLite", desc: "로컬 경량 데이터베이스" },
-      { category: "Hardware", tech: "Raspberry Pi 4", desc: "메인 컴퓨팅 유닛" },
+      { category: "DB", tech: "PostgreSQL + pgvector", desc: "벡터 검색 지원 데이터베이스" },
+      { category: "Hardware", tech: "RPi 4 / Jetson Nano", desc: "메인 컨트롤러 + GPIO 제어" },
+      { category: "Mic", tech: "ReSpeaker 2-Mic USB", desc: "음성 입력 마이크 어레이" },
+      { category: "Tools", tech: "Blender + Meshy.ai", desc: "3D 모델링 및 에셋 생성" },
     ],
   },
   // Slide 3: 기술 선택 이유
@@ -43,8 +45,8 @@ const SLIDES = [
     items: [
       { tech: "React (Not Next.js)", reason: "키오스크 환경에서 SSR/SEO 불필요, 정적 빌드로 가볍게 실행 가능", icon: "⚛️" },
       { tech: "FastAPI (Not Flask)", reason: "비동기 처리 기본 지원, WebSocket 내장, 자동 API 문서 생성", icon: "⚡" },
-      { tech: "faster-whisper (Not Vosk)", reason: "한국어 인식 정확도 높음, Whisper 대비 4배 빠른 속도", icon: "🎯" },
-      { tech: "SQLite (Not MySQL)", reason: "별도 DB 서버 불필요, 파일 하나로 동작, 라즈베리파이에 최적", icon: "💾" },
+      { tech: "Gemini (Not ChatGPT)", reason: "무료 API 제공, TTS 기능 통합, 한국어 성능 우수", icon: "🤖" },
+      { tech: "PostgreSQL (Not SQLite)", reason: "pgvector로 벡터 검색 지원, 대화 맥락 유사도 검색 가능", icon: "💾" },
       { tech: "Flutter (Not React Native)", reason: "네이티브 성능, 하나의 코드로 iOS/Android 동시 빌드", icon: "📱" },
     ],
   },
@@ -58,7 +60,7 @@ const SLIDES = [
         color: "#3776AB",
         icon: "🐍",
         percent: 50,
-        usedIn: ["FastAPI 백엔드 서버", "faster-whisper (STT)", "Porcupine (Wake Word)", "Google TTS 연동", "AI API 호출 로직"],
+        usedIn: ["FastAPI 백엔드 서버", "faster-whisper (STT)", "Porcupine (Wake Word)", "Gemini API 호출 로직", "GPIO 하드웨어 제어"],
       },
       {
         name: "JavaScript",
@@ -92,8 +94,8 @@ const SLIDES = [
       { label: "마이크 입력", icon: "🎤", color: "#3B82F6" },
       { label: "Porcupine\nWake Word", icon: "👂", color: "#4F46E5" },
       { label: "faster-whisper\nSTT", icon: "📝", color: "#6366F1" },
-      { label: "OpenAI\nChatGPT", icon: "🧠", color: "#8B5CF6" },
-      { label: "Google\nTTS", icon: "🔊", color: "#06B6D4" },
+      { label: "Gemini\n2.5-flash", icon: "🧠", color: "#8B5CF6" },
+      { label: "Gemini\nTTS", icon: "🔊", color: "#06B6D4" },
     ],
     bottom: [
       { title: "스피커 출력 + React UI 업데이트", desc: "FastAPI 백엔드가 모든 통신을 중앙에서 관리", color: "#10B981" },
@@ -322,7 +324,7 @@ export default function Presentation() {
                 animation: "fadeSlideUp 0.5s ease 0s both",
               }}>
                 <div style={{ fontSize: "18px", fontWeight: 600, color: "#A78BFA" }}>외부 클라우드</div>
-                <div style={{ fontSize: "15px", color: "#94A3B8", marginTop: "5px" }}>OpenAI ChatGPT · Google TTS</div>
+                <div style={{ fontSize: "15px", color: "#94A3B8", marginTop: "5px" }}>Gemini-2.5-flash (AI + TTS)</div>
               </div>
               <div style={{ fontSize: "20px", color: "#4F46E5" }}>↕ API 호출</div>
               {/* Center: FastAPI Server */}
@@ -332,7 +334,7 @@ export default function Presentation() {
                 animation: "fadeSlideUp 0.5s ease 0.1s both",
               }}>
                 <div style={{ fontSize: "22px", fontWeight: 700, color: "#818CF8" }}>FastAPI 백엔드 (Python)</div>
-                <div style={{ fontSize: "15px", color: "#94A3B8", marginTop: "6px" }}>중앙 컨트롤러 · REST API · WebSocket · SQLite DB</div>
+                <div style={{ fontSize: "15px", color: "#94A3B8", marginTop: "6px" }}>중앙 컨트롤러 · REST API · WebSocket · PostgreSQL</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "100px" }}>
                 <div style={{ textAlign: "center" }}>
@@ -371,8 +373,8 @@ export default function Presentation() {
                   animation: "fadeSlideUp 0.5s ease 0.4s both",
                 }}>
                   <div style={{ fontSize: "26px", marginBottom: "8px" }}>🔧</div>
-                  <div style={{ fontSize: "17px", fontWeight: 600, color: "#60A5FA" }}>Raspberry Pi 4</div>
-                  <div style={{ fontSize: "14px", color: "#94A3B8", marginTop: "5px" }}>Porcupine · faster-whisper</div>
+                  <div style={{ fontSize: "17px", fontWeight: 600, color: "#60A5FA" }}>RPi 4 / Jetson Nano</div>
+                  <div style={{ fontSize: "14px", color: "#94A3B8", marginTop: "5px" }}>Porcupine · faster-whisper · GPIO</div>
                 </div>
               </div>
             </div>
@@ -411,7 +413,7 @@ export default function Presentation() {
               ))}
             </div>
             <div style={{ textAlign: "center", marginTop: "24px", fontSize: "15px", color: "#64748B" }}>
-              데이터 저장: SQLite  |  하드웨어: Raspberry Pi 4  |  모바일: Flutter
+              데이터 저장: PostgreSQL + pgvector  |  하드웨어: RPi 4 / Jetson Nano  |  모바일: Flutter
             </div>
           </div>
         );
