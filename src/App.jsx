@@ -438,20 +438,20 @@ export default function Presentation() {
                 <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none", transform: "scale(1)", transformOrigin: "0 0" }} title="design preview" />
               </div>
               <div style={{ flex: "1" }}>
-                <div style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "24px" }}>주요 요소</div>
+                <div style={{ fontSize: "24px", fontWeight: 600, color: "#F1F5F9", marginBottom: "24px" }}>주요 요소</div>
                 {slide.features.map((f, i) => (
                   <div key={i} style={{
-                    display: "flex", alignItems: "center", gap: "12px", marginBottom: "18px",
+                    display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px",
                     animation: `fadeSlideUp 0.4s ease ${i * 0.08}s both`,
                   }}>
                     <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#6366F1", flexShrink: 0 }} />
-                    <span style={{ fontSize: "17px", color: "#E2E8F0" }}>{f}</span>
+                    <span style={{ fontSize: "20px", color: "#E2E8F0" }}>{f}</span>
                   </div>
                 ))}
                 {slide.subFeatures && (
                   <div style={{ marginTop: "6px", paddingLeft: "20px" }}>
                     {slide.subFeatures.map((sf, i) => (
-                      <div key={i} style={{ fontSize: "15px", color: "#94A3B8", marginBottom: "8px" }}>· {sf}</div>
+                      <div key={i} style={{ fontSize: "18px", color: "#94A3B8", marginBottom: "8px" }}>· {sf}</div>
                     ))}
                   </div>
                 )}
@@ -472,17 +472,17 @@ export default function Presentation() {
                 <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none" }} title="mobile preview" />
               </div>
               <div style={{ flex: "1" }}>
-                <div style={{ fontSize: "18px", fontWeight: 600, color: "#94A3B8", marginBottom: "20px" }}>주요 화면 구성</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div style={{ fontSize: "22px", fontWeight: 600, color: "#94A3B8", marginBottom: "20px" }}>주요 화면 구성</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                   {slide.features.map((f, i) => (
                     <div key={i} style={{
-                      display: "flex", alignItems: "center", gap: "8px",
-                      padding: "10px 14px", borderRadius: "8px", background: "rgba(255,255,255,0.03)",
+                      display: "flex", alignItems: "center", gap: "10px",
+                      padding: "12px 16px", borderRadius: "8px", background: "rgba(255,255,255,0.03)",
                       border: "1px solid rgba(255,255,255,0.06)",
                       animation: `fadeSlideUp 0.3s ease ${i * 0.04}s both`,
                     }}>
-                      <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#6366F1", flexShrink: 0 }} />
-                      <div style={{ fontSize: "13px", color: "#E2E8F0" }}>{f}</div>
+                      <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#6366F1", flexShrink: 0 }} />
+                      <div style={{ fontSize: "16px", color: "#E2E8F0" }}>{f}</div>
                     </div>
                   ))}
                 </div>
