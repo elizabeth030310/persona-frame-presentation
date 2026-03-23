@@ -163,7 +163,7 @@ const SLIDES = [
   {
     type: "mobile",
     title: "모바일 디자인 (Flutter)",
-    iframeSrc: "/mobile.html",
+    iframeSrc: "/mobile-phone.html",
     features: [
       "디바이스 연결 정보",
       "날씨",
