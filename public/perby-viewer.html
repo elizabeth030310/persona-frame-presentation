@@ -88,15 +88,9 @@ loader.load('/purby_final.glb', (gltf) => {
   const maxDim = Math.max(size.x, size.y, size.z);
   const scale = 1.4 / maxDim;
   model.scale.setScalar(scale);
-  
-  // Recalculate after scaling
-  const scaledBox = new THREE.Box3().setFromObject(model);
-  const scaledCenter = scaledBox.getCenter(new THREE.Vector3());
-  
-  // Move model so its center is at origin
-  model.position.x = -scaledCenter.x;
-  model.position.y = -scaledCenter.y;
-  model.position.z = -scaledCenter.z;
+  model.position.x = -center.x * scale;
+  model.position.y = -box.min.y * scale - 0.8;
+  model.position.z = -center.z * scale;
   
   scene.add(model);
   
@@ -108,9 +102,9 @@ loader.load('/purby_final.glb', (gltf) => {
     action.play();
   }
   
-  // Camera looks at exact center of model
-  controls.target.set(0, 0, 0);
-  camera.position.set(0, 0, 5.5);
+  const midY = size.y * scale * 0.5;
+  controls.target.set(0, midY + 0.4, 0);
+  camera.position.set(0, midY + 0.4, 7.0);
   controls.update();
 }, 
 (progress) => {},
