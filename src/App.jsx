@@ -454,27 +454,27 @@ export default function Presentation() {
 
       case "mobile":
         return (
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 60px" }}>
-            <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "28px" }}>{slide.title}</h1>
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 80px" }}>
+            <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "32px" }}>{slide.title}</h1>
             <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
               <div style={{
-                width: "380px", height: "650px", borderRadius: "28px", overflow: "hidden",
-                border: "2px solid rgba(99,102,241,0.3)", background: "#000", flexShrink: 0,
+                flex: "1.8", aspectRatio: "9/16", maxHeight: "75vh", borderRadius: "16px", overflow: "hidden",
+                border: "2px solid rgba(99,102,241,0.3)", background: "#000",
               }}>
                 <iframe src={slide.iframeSrc} style={{ width: "100%", height: "100%", border: "none" }} title="mobile preview" />
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: "17px", fontWeight: 600, color: "#94A3B8", marginBottom: "22px" }}>Flutter 크로스 플랫폼 앱 주요 기능</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ flex: "1" }}>
+                <div style={{ fontSize: "20px", fontWeight: 600, color: "#94A3B8", marginBottom: "24px" }}>Flutter 크로스 플랫폼 앱 주요 기능</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
                   {slide.features.map((f, i) => (
                     <div key={i} style={{
                       display: "flex", alignItems: "center", gap: "14px",
-                      padding: "14px 18px", borderRadius: "10px", background: "rgba(255,255,255,0.03)",
+                      padding: "16px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.03)",
                       border: "1px solid rgba(255,255,255,0.06)",
                       animation: `fadeSlideUp 0.4s ease ${i * 0.1}s both`,
                     }}>
-                      <div style={{ fontSize: "22px" }}>{f.icon}</div>
-                      <div style={{ fontSize: "15px", color: "#E2E8F0" }}>{f.text}</div>
+                      <div style={{ fontSize: "24px" }}>{f.icon}</div>
+                      <div style={{ fontSize: "16px", color: "#E2E8F0" }}>{f.text}</div>
                     </div>
                   ))}
                 </div>
