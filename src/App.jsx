@@ -27,7 +27,7 @@ const SLIDES = [
     points: [
       "React: 컴포넌트 기반 UI 라이브러리, 재사용성 높음",
       "Vite: 빠른 빌드 속도, HMR(Hot Module Replacement) 지원",
-      "라즈베리파이 Chromium 키오스크 모드로 전체 화면 표시",
+      "라즈베리파이 키오스크 모드로 전체 화면 표시",
       "정적 빌드 → FastAPI에서 바로 서빙 가능",
     ],
     why: "Next.js 대비 SSR/SEO 불필요, 가볍고 빠른 정적 빌드에 최적",
@@ -68,11 +68,11 @@ const SLIDES = [
     tech: "faster-whisper",
     points: [
       "OpenAI Whisper 모델의 C++ 최적화 버전",
-      "원본 Whisper 대비 약 4배 빠른 처리 속도",
-      "한국어 음성 인식 정확도 높음",
+      "원본 Whisper 대비 약 4배 빠른 처리 속도, 메모리 사용량도 적음",
+      "Whisper와 동일한 한국어 인식 정확도 유지",
       "로컬 실행 → 인터넷 없이도 음성 인식 가능",
     ],
-    why: "Vosk 대비 한국어 정확도 월등, 로컬 환경에서도 빠른 속도",
+    why: "Whisper는 정확하지만 느리고 무거움 → faster-whisper는 같은 정확도에 4배 빠르고 가벼워 라즈베리파이에 적합",
     color: "#6366F1",
   },
   // Slide 6: 기술 스택 - Wake Word
@@ -124,11 +124,11 @@ const SLIDES = [
     tech: "PostgreSQL + pgvector",
     points: [
       "오픈소스 관계형 데이터베이스 (세계 1위 인기)",
-      "pgvector 확장으로 벡터 유사도 검색 지원",
-      "대화 히스토리 기반 맥락 검색에 활용",
+      "SQL에 AI 대화 기억 본문을 저장",
+      "pgvector로 기억을 벡터화하여 유사한 것만 꺼내서 활용",
       "일정, 메모, 설정값, AI 대화 기록 저장",
     ],
-    why: "SQLite 대비 벡터 검색 지원, 대화 맥락 유사도 분석 가능",
+    why: "SQL로 기억 원본 저장 + pgvector로 유사도 검색 → 관련 기억만 AI에 전달",
     color: "#336791",
   },
   // Slide 10: 기술 스택 - Hardware
@@ -168,13 +168,11 @@ const SLIDES = [
       "디바이스 연결 정보",
       "날씨",
       "앱 직접 제어 버튼",
-      "오늘 일정 요약",
       "AI 처리 결과",
       "날짜 스트립",
       "일정 목록",
       "일정 추가",
       "디바이스 연동",
-      "배경 사진 업로드",
       "절전 시간 설정",
       "알림 설정",
     ],
@@ -196,9 +194,9 @@ const SLIDES = [
     type: "next",
     title: "향후 계획 (Next Steps)",
     steps: [
-      { icon: "💻", title: "프론트엔드 UI 개발 착수", desc: "React + Vite 환경 세팅\n대기 화면 / AI 화면 실제 구현", color: "#3B82F6" },
-      { icon: "🗄️", title: "DB 스키마 설계 및 구현", desc: "SQLite 기반 테이블 설계\n일정, 메모, 설정값 저장 구조", color: "#6366F1" },
-      { icon: "🖥️", title: "백엔드 서버 개발 시작", desc: "FastAPI REST API 구축\nWebSocket 실시간 통신 구조", color: "#8B5CF6" },
+      { icon: "🎤", title: "음성 처리 파이프라인 구현", desc: "Porcupine 호출어 감지 → faster-whisper STT → Gemini AI 응답 → TTS 출력\n전체 음성 흐름 통합 및 지연시간 최적화", color: "#6366F1" },
+      { icon: "🧠", title: "AI 기억(메모리) 유지 방식 설계", desc: "PostgreSQL + pgvector로 대화 히스토리 벡터 저장\n유사도 검색으로 과거 대화 맥락을 AI 프롬프트에 주입", color: "#8B5CF6" },
+      { icon: "🗄️", title: "DB 스키마 설계 및 구현", desc: "일정, 메모, 설정값, 대화 기록 테이블 설계\n벡터 임베딩 저장 구조 포함", color: "#3B82F6" },
     ],
   },
   // Slide 9: Q&A
@@ -248,17 +246,17 @@ export default function Presentation() {
         return (
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 80px" }}>
             <h1 style={{ fontSize: "38px", fontWeight: 700, color: "#F1F5F9", marginBottom: "36px" }}>{slide.title}</h1>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {slide.cards.map((c, i) => (
                 <div key={i} style={{
-                  background: "rgba(255,255,255,0.04)", borderRadius: "16px", padding: "32px 36px",
-                  border: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "flex-start", gap: "22px",
+                  background: "rgba(255,255,255,0.04)", borderRadius: "16px", padding: "28px 36px",
+                  border: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: "24px",
                   animation: `fadeSlideUp 0.5s ease ${i * 0.1}s both`,
                 }}>
                   <div style={{ width: "56px", height: "56px", borderRadius: "12px", background: c.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px", flexShrink: 0 }}>{c.icon}</div>
                   <div>
-                    <div style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "8px" }}>{c.title}</div>
-                    <div style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.6 }}>{c.desc}</div>
+                    <div style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "6px" }}>{c.title}</div>
+                    <div style={{ fontSize: "16px", color: "#94A3B8", lineHeight: 1.6 }}>{c.desc}</div>
                   </div>
                 </div>
               ))}
@@ -268,15 +266,15 @@ export default function Presentation() {
 
       case "techDetail":
         return (
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%", padding: "0 80px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", padding: "0 80px", textAlign: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "12px", justifyContent: "center" }}>
               <div style={{ fontSize: "18px", fontWeight: 600, color: slide.color, letterSpacing: "2px", textTransform: "uppercase" }}>{slide.category}</div>
             </div>
             <h1 style={{ fontSize: "44px", fontWeight: 800, color: "#F1F5F9", marginBottom: "40px" }}>{slide.tech}</h1>
-            <div style={{ display: "flex", flexDirection: "column", gap: "18px", marginBottom: "36px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px", marginBottom: "36px", width: "100%", maxWidth: "700px" }}>
               {slide.points.map((p, i) => (
                 <div key={i} style={{
-                  display: "flex", alignItems: "flex-start", gap: "14px",
+                  display: "flex", alignItems: "flex-start", gap: "14px", textAlign: "left",
                   animation: `fadeSlideUp 0.4s ease ${i * 0.1}s both`,
                 }}>
                   <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: slide.color, flexShrink: 0, marginTop: "8px" }} />
@@ -285,7 +283,7 @@ export default function Presentation() {
               ))}
             </div>
             <div style={{
-              padding: "20px 28px", borderRadius: "12px",
+              padding: "20px 28px", borderRadius: "12px", width: "100%", maxWidth: "700px", textAlign: "left",
               background: `${slide.color}15`, border: `1px solid ${slide.color}30`,
               animation: "fadeSlideUp 0.5s ease 0.4s both",
             }}>
@@ -639,25 +637,8 @@ export default function Presentation() {
         {renderSlide()}
       </div>
 
-      {/* Navigation */}
-      <div style={{ position: "absolute", bottom: "24px", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: "16px", zIndex: 10 }}>
-        <button onClick={() => { setCurrent(Math.max(current - 1, 0)); setAnimKey(animKey + 1); }}
-          style={{ background: "rgba(255,255,255,0.06)", border: "none", color: "#94A3B8", fontSize: "18px", padding: "8px 14px", borderRadius: "8px", cursor: "pointer" }}>←</button>
-        <span style={{ fontSize: "13px", color: "#64748B", fontVariantNumeric: "tabular-nums", minWidth: "60px", textAlign: "center" }}>{current + 1} / {total}</span>
-        <button onClick={() => { setCurrent(Math.min(current + 1, total - 1)); setAnimKey(animKey + 1); }}
-          style={{ background: "rgba(255,255,255,0.06)", border: "none", color: "#94A3B8", fontSize: "18px", padding: "8px 14px", borderRadius: "8px", cursor: "pointer" }}>→</button>
-      </div>
-
       {/* Progress bar */}
       <div style={{ position: "absolute", bottom: 0, left: 0, height: "2px", background: "#4F46E5", width: `${((current + 1) / total) * 100}%`, transition: "width 0.4s ease" }} />
-
-      {/* Slide dots */}
-      <div style={{ position: "absolute", bottom: "60px", left: "50%", transform: "translateX(-50%)", display: "flex", gap: "6px", zIndex: 10 }}>
-        {SLIDES.map((_, i) => (
-          <div key={i} onClick={() => { setCurrent(i); setAnimKey(animKey + 1); }}
-            style={{ width: i === current ? "24px" : "8px", height: "8px", borderRadius: "4px", background: i === current ? "#6366F1" : "rgba(255,255,255,0.1)", cursor: "pointer", transition: "all 0.3s ease" }} />
-        ))}
-      </div>
 
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
