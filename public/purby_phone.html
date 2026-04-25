@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purby Phone</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent:  #6B5CE7;
+    --accent10: rgba(107,92,231,0.10);
+    --accent20: rgba(107,92,231,0.20);
+    --gold:    #A07828;
+    --green:   #2A9C70;
+    --red:     #D94040;
+    --blue:    #3A78C9;
+    --bg:      #F2F4F7;
+    --panel:   #ffffff;
+    --t1:      #181620;
+    --t2:      #58566A;
+    --t3:      #A09EB8;
+    --border:  #EAECF0;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── 폰 프레임 */
+  .phone-outer {
+    width: 320px; height: 680px;
+    background: #1a1230;
+    border-radius: 46px;
+    padding: 10px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.1),
+      0 30px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .phone-inner {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    border-radius: 38px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 노치 */
+  .phone-notch {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 26px;
+    background: #1a1230;
+    border-radius: 0 0 16px 16px;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .notch-camera { width: 9px; height: 9px; background: #2a2240; border-radius: 50%; border: 1px solid #3a3260; }
+  .notch-speaker { width: 44px; height: 4px; background: #2a2240; border-radius: 3px; }
+
+  /* ── 화면 */
+  .screen { flex:1; display:none; flex-direction:column; overflow:hidden; padding-top:26px; }
+  .screen.active { display:flex; }
+  .screen-scroll { flex:1; overflow-y:auto; padding:0 13px 14px; scrollbar-width:none; }
+  .screen-scroll::-webkit-scrollbar { display:none; }
+
+  /* 헤더 */
+  .screen-header { padding:14px 16px 0; flex-shrink:0; }
+  .screen-header h2 { font-size:19px; font-weight:700; color:var(--t1); }
+  .screen-header .sub { font-size:11px; color:var(--t3); margin-top:2px; }
+
+  /* 카드 */
+  .card { background:var(--panel); border-radius:16px; padding:14px; box-shadow:0 4px 12px rgba(0,0,0,0.06); margin-bottom:9px; }
+  .card-title { font-size:13px; font-weight:700; color:var(--t1); margin-bottom:11px; }
+
+  /* ── 홈 */
+  .home-header { display:flex; justify-content:space-between; align-items:flex-start; padding:14px 16px 0; flex-shrink:0; }
+  .device-pill { display:flex; align-items:center; gap:4px; background:rgba(42,156,112,0.10); border:1px solid rgba(42,156,112,0.25); border-radius:20px; padding:4px 9px; font-size:10px; font-weight:600; color:var(--green); }
+  .device-dot { width:6px; height:6px; background:var(--green); border-radius:50%; box-shadow:0 0 5px rgba(42,156,112,0.6); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  .char-card { background:var(--panel); border-radius:16px; padding:20px 14px; box-shadow:0 4px 12px rgba(0,0,0,0.06); margin-bottom:9px; text-align:center; }
+  .char-avatar { width:88px; height:88px; background:var(--accent10); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:42px; margin:0 auto 12px; }
+  .char-greeting { font-size:12px; color:var(--t2); font-weight:500; }
+  .char-name { font-size:20px; font-weight:700; color:var(--t1); margin-top:3px; }
+
+  .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+  .quick-tile { padding:11px; border-radius:11px; cursor:pointer; transition:transform .15s; }
+  .quick-tile:active { transform:scale(.95); }
+  .quick-tile-icon { width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; margin-bottom:7px; }
+  .quick-tile-title { font-size:11px; font-weight:700; color:var(--t1); }
+  .quick-tile-sub { font-size:9px; color:var(--t3); margin-top:1px; }
+
+  .sched-item { display:flex; align-items:center; gap:8px; padding:8px 9px; border-radius:9px; background:var(--bg); border:1px solid var(--border); margin-bottom:6px; }
+  .sched-item.now { background:rgba(107,92,231,0.05); border-color:rgba(107,92,231,0.2); }
+  .sched-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .sched-info { flex:1; }
+  .sched-time { font-size:9px; font-weight:600; color:var(--t3); letter-spacing:.5px; }
+  .sched-title-text { font-size:11px; font-weight:600; color:var(--t1); margin-top:1px; }
+  .sched-title-text.done { text-decoration:line-through; color:var(--t3); }
+  .now-badge { background:var(--accent10); border-radius:6px; padding:2px 6px; font-size:8px; font-weight:700; color:var(--accent); }
+
+  .ai-badge-inline { display:inline-block; background:var(--accent10); border-radius:6px; padding:2px 7px; font-size:9px; font-weight:600; color:var(--t3); margin-left:6px; vertical-align:middle; }
+  .ai-sensor { width:50px; height:50px; background:var(--accent10); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 9px; }
+
+  /* ── 일정 */
+  .sched-header-row { display:flex; justify-content:space-between; align-items:center; padding:14px 16px 0; flex-shrink:0; }
+  .month-title-btn { font-size:19px; font-weight:700; color:var(--t1); display:flex; align-items:center; gap:2px; cursor:pointer; user-select:none; }
+  .month-arrow { color:var(--accent); font-size:16px; }
+  .header-btns { display:flex; gap:7px; }
+  .header-pill { border-radius:18px; padding:5px 11px; font-size:11px; font-weight:600; cursor:pointer; user-select:none; transition:opacity .15s; }
+  .header-pill:active { opacity:.7; }
+  .pill-ghost { background:var(--accent10); color:var(--accent); }
+  .pill-solid { background:var(--accent); color:white; width:28px; height:28px; display:flex; align-items:center; justify-content:center; padding:0; border-radius:50%; font-size:16px; }
+
+  .date-strip { display:flex; gap:6px; overflow-x:auto; padding:8px 14px; scrollbar-width:none; flex-shrink:0; }
+  .date-strip::-webkit-scrollbar { display:none; }
+  .date-cell { display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex-shrink:0; width:38px; }
+  .date-day-label { font-size:9px; font-weight:600; color:var(--t3); }
+  .date-num { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--t1); transition:background .15s,color .15s; }
+  .date-cell.today .date-num { background:var(--accent10); border:1.5px solid rgba(107,92,231,.4); }
+  .date-cell.selected .date-num { background:var(--accent); color:white; border:none; }
+  .date-cell.selected .date-day-label { color:var(--accent); }
+
+  .date-label-row { display:flex; align-items:center; gap:7px; padding:0 16px; margin-bottom:9px; flex-shrink:0; }
+  .date-label-text { font-size:12px; font-weight:700; color:var(--t1); }
+  .date-rel-badge { background:var(--accent10); border-radius:6px; padding:2px 7px; font-size:9px; font-weight:600; color:var(--accent); }
+  .date-rel-badge.past { background:var(--border); color:var(--t3); }
+
+  .sched-card-item { background:var(--panel); border-radius:13px; display:flex; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:8px; cursor:pointer; transition:opacity .2s; user-select:none; }
+  .sched-card-item:active { opacity:.75; }
+  .sched-card-bar { width:4px; flex-shrink:0; }
+  .sched-card-body { flex:1; padding:12px 12px 12px 10px; display:flex; align-items:center; gap:10px; }
+  .sched-card-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .sched-card-info { flex:1; }
+  .sched-card-time { font-size:9px; font-weight:600; color:var(--t3); letter-spacing:.5px; }
+  .sched-card-title { font-size:12px; font-weight:600; color:var(--t1); margin-top:2px; }
+  .sched-card-title.done { text-decoration:line-through; color:var(--t3); }
+  .done-badge { background:var(--accent10); border-radius:12px; padding:2px 8px; font-size:9px; font-weight:700; color:var(--accent); }
+
+  .sched-empty { display:flex; flex-direction:column; align-items:center; padding:40px 0; gap:9px; }
+  .sched-empty-icon { width:64px; height:64px; background:var(--accent10); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; opacity:.5; }
+  .sched-empty-title { font-size:13px; font-weight:600; color:var(--t2); }
+  .sched-empty-sub { font-size:11px; color:var(--t3); }
+
+  /* ── 메뉴얼 */
+  .manual-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .manual-card { background:var(--panel); border-radius:15px; padding:14px; box-shadow:0 4px 12px rgba(0,0,0,.06); min-height:120px; display:flex; flex-direction:column; cursor:pointer; transition:transform .15s; }
+  .manual-card:active { transform:scale(.97); }
+  .manual-icon { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:auto; }
+  .manual-title { font-size:12px; font-weight:700; color:#181620; margin-top:10px; }
+  .manual-desc { font-size:9px; color:var(--t3); margin-top:3px; line-height:1.5; }
+
+  /* ── 설정 */
+  .section-label { font-size:10px; font-weight:700; color:var(--t3); letter-spacing:.5px; padding:0 4px; margin-bottom:6px; margin-top:2px; }
+  .settings-card { background:var(--panel); border-radius:13px; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:16px; overflow:hidden; }
+  .settings-row { display:flex; align-items:center; gap:10px; padding:12px 13px; cursor:pointer; transition:background .15s; }
+  .settings-row:active { background:var(--bg); }
+  .settings-row+.settings-row { border-top:1px solid var(--border); }
+  .settings-icon { width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+  .settings-info { flex:1; }
+  .settings-title { font-size:12px; font-weight:600; color:var(--t1); }
+  .settings-sub { font-size:10px; color:var(--t3); margin-top:1px; }
+  .settings-badge { background:var(--accent10); border-radius:9px; padding:2px 8px; font-size:10px; font-weight:700; color:var(--accent); }
+  .chevron { color:var(--t3); font-size:13px; }
+  .toggle { width:38px; height:22px; border-radius:11px; background:#ddd; position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+  .toggle.on { background:var(--accent); }
+  .toggle::after { content:''; position:absolute; width:16px; height:16px; border-radius:50%; background:white; top:3px; left:3px; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .toggle.on::after { transform:translateX(16px); }
+  .slider-row { padding:11px 13px; border-top:1px solid var(--border); }
+  .slider-label-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+  .slider-label { font-size:12px; font-weight:600; color:var(--t1); }
+  .slider-value { font-size:11px; font-weight:700; }
+  input[type=range] { width:100%; height:4px; border-radius:2px; outline:none; cursor:pointer; -webkit-appearance:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+
+  /* ── 바텀 네비 */
+  .bottom-nav { height:64px; margin:0 9px 7px; background:var(--panel); border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,.08); display:flex; align-items:center; flex-shrink:0; }
+  .nav-item { flex:1; display:flex; align-items:center; justify-content:center; cursor:pointer; height:100%; user-select:none; }
+  .nav-pill { display:flex; align-items:center; gap:4px; padding:6px 9px; border-radius:16px; transition:background .2s,padding .2s; }
+  .nav-item.active .nav-pill { background:var(--accent); padding:6px 13px; }
+  .nav-icon { font-size:17px; filter:grayscale(1) opacity(.5); transition:filter .2s; }
+  .nav-item.active .nav-icon { filter:none; }
+  .nav-label { font-size:11px; font-weight:600; color:white; display:none; white-space:nowrap; }
+  .nav-item.active .nav-label { display:block; }
+
+  /* ── 모달/시트 공통 */
+  .overlay { position:absolute; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:flex-end; z-index:200; opacity:0; pointer-events:none; transition:opacity .25s; border-radius:38px; overflow:hidden; }
+  .overlay.open { opacity:1; pointer-events:all; }
+  .sheet { background:var(--panel); border-radius:20px 20px 0 0; padding:12px 16px 26px; width:100%; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); }
+  .overlay.open .sheet { transform:translateY(0); }
+  .sheet-handle { width:32px; height:4px; background:rgba(160,158,184,.35); border-radius:2px; margin:0 auto 16px; }
+
+  /* 월 선택 */
+  .modal-year-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .modal-year { font-size:18px; font-weight:700; color:var(--t1); }
+  .modal-arrow { width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--t2); cursor:pointer; border-radius:7px; transition:background .15s; }
+  .modal-arrow:active { background:var(--bg); }
+  .month-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .month-cell { height:36px; display:flex; align-items:center; justify-content:center; border-radius:9px; font-size:12px; font-weight:600; color:var(--t1); background:var(--bg); cursor:pointer; transition:background .15s,color .15s; user-select:none; }
+  .month-cell.selected { background:var(--accent); color:white; }
+  .month-cell.current { border:1.5px solid rgba(107,92,231,.4); }
+  .month-cell:active { opacity:.7; }
+
+  /* 일정 추가 */
+  .add-input { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:10px 12px; font-size:13px; font-family:'Inter',sans-serif; color:var(--t1); background:var(--bg); outline:none; transition:border-color .2s; margin-bottom:11px; }
+  .add-input:focus { border-color:var(--accent); }
+  .time-row { display:flex; gap:9px; margin-bottom:14px; }
+  .time-box { flex:1; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:9px 11px; }
+  .time-label { font-size:9px; font-weight:700; color:var(--t3); letter-spacing:1px; }
+  .time-val { font-size:17px; font-weight:700; color:var(--accent); margin-top:2px; letter-spacing:1px; }
+  .add-btn { width:100%; background:var(--accent); color:white; border:none; border-radius:11px; padding:13px; font-size:13px; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer; transition:opacity .15s; }
+  .add-btn:active { opacity:.85; }
+  .add-sheet-title { font-size:14px; font-weight:700; color:var(--t1); margin-bottom:14px; }
+
+  /* 성격 시트 */
+  .personality-item { display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:11px; border:1px solid var(--border); margin-bottom:8px; cursor:pointer; transition:background .15s,border-color .15s; user-select:none; }
+  .personality-item.selected { border-width:1.5px; }
+  .personality-icon-box { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .personality-info { flex:1; }
+  .personality-name { font-size:12px; font-weight:700; }
+  .personality-desc { font-size:9px; color:var(--t3); margin-top:1px; }
+
+  /* 절전 타임 pill */
+  .sleep-pill { flex:1; background:var(--accent10); border:1px solid var(--accent20); border-radius:11px; padding:7px; text-align:center; cursor:pointer; }
+  .sleep-pill-label { font-size:9px; font-weight:600; color:var(--t3); }
+  .sleep-pill-time { font-size:17px; font-weight:700; color:var(--accent); letter-spacing:-.5px; }
+  .sleep-pill-hint { font-size:8px; color:var(--t3); }
+
+  /* 토스트 */
+  .toast { position:absolute; bottom:80px; left:50%; transform:translateX(-50%) translateY(16px); background:rgba(24,22,32,.9); color:white; border-radius:18px; padding:8px 16px; font-size:11px; font-weight:600; white-space:nowrap; opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; z-index:300; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="phone-outer">
+  <div class="phone-inner" id="phoneInner">
+    <div class="phone-notch">
+      <div class="notch-speaker"></div>
+      <div class="notch-camera"></div>
+    </div>
+
+    <!-- ══ 홈 ══ -->
+    <div class="screen active" id="screen-home">
+      <div class="home-header">
+        <div>
+          <div style="font-size:19px;font-weight:700;color:var(--t1)">홈</div>
+          <div style="font-size:11px;color:var(--t3)">Purby</div>
+        </div>
+        <div class="device-pill">
+          <div class="device-dot"></div>
+          디바이스 연결됨
+        </div>
+      </div>
+      <div class="screen-scroll" style="padding-top:11px">
+        <div class="char-card">
+          <div class="char-avatar">🤖</div>
+          <div class="char-greeting">안녕하세요! 👋</div>
+          <div class="char-name">사용자님!</div>
+        </div>
+        <div class="card">
+          <div class="card-title">앱 직접 제어</div>
+          <div class="quick-grid">
+            <div class="quick-tile" style="background:rgba(107,92,231,.06);border:1px solid rgba(107,92,231,.15)" onclick="showToast('🎵 음악 재생 명령 전송됨')">
+              <div class="quick-tile-icon" style="background:rgba(107,92,231,.12);color:#6B5CE7">🎵</div>
+              <div class="quick-tile-title">음악 재생</div>
+              <div class="quick-tile-sub">버튼 탭 → 액자에 재생</div>
+            </div>
+            <div class="quick-tile" style="background:rgba(42,156,112,.06);border:1px solid rgba(42,156,112,.15)" onclick="showToast('⏱ 타이머 25분 시작')">
+              <div class="quick-tile-icon" style="background:rgba(42,156,112,.12);color:#2A9C70">⏱</div>
+              <div class="quick-tile-title">타이머 설정</div>
+              <div class="quick-tile-sub">뽀모도로 25분 시작</div>
+            </div>
+            <div class="quick-tile" style="background:rgba(160,120,40,.06);border:1px solid rgba(160,120,40,.15)" onclick="showToast('📝 AI 요약 요청 중...')">
+              <div class="quick-tile-icon" style="background:rgba(160,120,40,.12);color:#A07828">📝</div>
+              <div class="quick-tile-title">일과 회고</div>
+              <div class="quick-tile-sub">AI 요약 받기</div>
+            </div>
+            <div class="quick-tile" style="background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.15)" onclick="showToast('💤 액자 절전 모드 전환')">
+              <div class="quick-tile-icon" style="background:rgba(148,163,184,.12);color:#94A3B8">💤</div>
+              <div class="quick-tile-title">절전 모드</div>
+              <div class="quick-tile-sub">액자 즉시 절전</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+            <div class="card-title" style="margin:0">오늘 일정</div>
+            <div style="font-size:11px;font-weight:600;color:var(--accent)" id="home-sched-count">0개</div>
+          </div>
+          <div id="home-sched-list">
+            <div style="text-align:center;padding:12px 0;font-size:12px;color:var(--t3)">등록된 일정이 없습니다.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;margin-bottom:18px">
+            <div class="card-title" style="margin:0">AI 처리 로그</div>
+            <div class="ai-badge-inline">대기 중</div>
+          </div>
+          <div style="text-align:center;padding-bottom:8px">
+            <div class="ai-sensor">📡</div>
+            <div style="font-size:12px;font-weight:500;color:var(--t2)">AI 명령 결과가 여기에 표시됩니다</div>
+            <div style="font-size:10px;color:var(--t3);margin-top:3px">실시간 연동 준비 중</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 일정 ══ -->
+    <div class="screen" id="screen-schedule">
+      <div class="sched-header-row">
+        <div class="month-title-btn" onclick="openMonthModal()">
+          <span id="month-display">2026년 4월</span>
+          <span class="month-arrow">⌄</span>
+        </div>
+        <div class="header-btns">
+          <div class="header-pill pill-ghost" onclick="goToday()">오늘</div>
+          <div class="header-pill pill-solid" onclick="openAddSheet()">＋</div>
+        </div>
+      </div>
+      <div class="date-strip" id="date-strip"></div>
+      <div class="date-label-row">
+        <div class="date-label-text" id="selected-date-label">4월 25일</div>
+        <div class="date-rel-badge" id="date-rel-label">오늘</div>
+      </div>
+      <div class="screen-scroll">
+        <div id="sched-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ 메뉴얼 ══ -->
+    <div class="screen" id="screen-manual">
+      <div class="screen-header">
+        <h2>디바이스 메뉴얼</h2>
+        <div class="sub">Purby 사용 가이드</div>
+      </div>
+      <div class="screen-scroll" style="padding-top:13px">
+        <div class="manual-grid">
+          <div class="manual-card" onclick="showToast('📺 디바이스 연결 가이드')">
+            <div class="manual-icon" style="background:rgba(107,92,231,.12);color:#6B5CE7">📺</div>
+            <div class="manual-title">디바이스 연결</div>
+            <div class="manual-desc">앱과 액자를 같은 Wi-Fi에 연결한 후 IP를 입력하세요</div>
+          </div>
+          <div class="manual-card" onclick="showToast('📷 QR 스캔 가이드')">
+            <div class="manual-icon" style="background:rgba(42,156,112,.12);color:#2A9C70">📷</div>
+            <div class="manual-title">QR 스캔</div>
+            <div class="manual-desc">QR 코드로 빠르게 디바이스를 등록하세요</div>
+          </div>
+          <div class="manual-card" onclick="showToast('📶 Wi-Fi 설정 가이드')">
+            <div class="manual-icon" style="background:rgba(160,120,40,.12);color:#A07828">📶</div>
+            <div class="manual-title">Wi-Fi 설정</div>
+            <div class="manual-desc">디바이스를 홈 네트워크에 연결하는 방법을 안내해요</div>
+          </div>
+          <div class="manual-card" onclick="showToast('🔔 알림 설정 가이드')">
+            <div class="manual-icon" style="background:rgba(58,120,201,.12);color:#3A78C9">🔔</div>
+            <div class="manual-title">알림 설정</div>
+            <div class="manual-desc">일정 알림과 브리핑 시간을 원하는 대로 조정하세요</div>
+          </div>
+          <div class="manual-card" onclick="showToast('🔧 문제해결 가이드')">
+            <div class="manual-icon" style="background:rgba(217,64,64,.12);color:#D94040">🔧</div>
+            <div class="manual-title">문제해결</div>
+            <div class="manual-desc">연결 오류나 동작 이상 시 이 가이드를 참고하세요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 설정 ══ -->
+    <div class="screen" id="screen-settings">
+      <div class="screen-header"><h2>설정</h2></div>
+      <div class="screen-scroll" style="padding-top:11px">
+
+        <div class="section-label">프로필</div>
+        <div class="settings-card">
+          <div class="settings-row" onclick="showToast('이름 설정 다이얼로그')">
+            <div class="settings-icon" style="background:#6B5CE7">👤</div>
+            <div class="settings-info"><div class="settings-title">내 이름</div></div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:12px;font-weight:600;color:var(--t2)">미설정</span>
+              <span class="chevron">›</span>
+            </div>
+          </div>
+          <div class="settings-row" onclick="openPersonalitySheet()">
+            <div class="settings-icon" style="background:#8B5CF6">🧠</div>
+            <div class="settings-info"><div class="settings-title">퍼비 성격</div></div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <div class="settings-badge" id="personality-badge">친근한</div>
+              <span class="chevron">›</span>
+            </div>
+          </div>
+          <div class="settings-row" onclick="toggleDarkMode()">
+            <div class="settings-icon" style="background:#64748B" id="dark-icon">☀️</div>
+            <div class="settings-info"><div class="settings-title" id="dark-label">라이트 모드</div></div>
+            <div class="toggle" id="dark-toggle"></div>
+          </div>
+        </div>
+
+        <div class="section-label">시간 설정</div>
+        <div class="settings-card">
+          <div class="settings-row" style="cursor:default">
+            <div class="settings-icon" style="background:rgba(14,165,233,.85)">🌙</div>
+            <div class="settings-info">
+              <div class="settings-title">절전 시간</div>
+              <div class="settings-sub">설정 시간에 액자가 절전으로 전환됩니다</div>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div style="padding:0 13px 13px;display:flex;gap:9px">
+            <div class="sleep-pill" onclick="showToast('시작 시간 선택')">
+              <div class="sleep-pill-label">시작</div>
+              <div class="sleep-pill-time">02:00</div>
+              <div class="sleep-pill-hint">탭하여 변경</div>
+            </div>
+            <div style="display:flex;align-items:center;font-size:14px;color:var(--t3)">→</div>
+            <div class="sleep-pill" onclick="showToast('종료 시간 선택')">
+              <div class="sleep-pill-label">종료</div>
+              <div class="sleep-pill-time">06:00</div>
+              <div class="sleep-pill-hint">탭하여 변경</div>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-icon" style="background:#A07828">🌅</div>
+            <div class="settings-info">
+              <div class="settings-title">아침 브리핑</div>
+              <div class="settings-sub">오늘 일정을 요약해드려요</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-icon" style="background:#6B5CE7">📖</div>
+            <div class="settings-info">
+              <div class="settings-title">회고 시간</div>
+              <div class="settings-sub">하루를 돌아보는 알림을 드려요</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+
+        <div class="section-label">디스플레이</div>
+        <div class="settings-card">
+          <div class="slider-row" style="padding-top:13px">
+            <div class="slider-label-row">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="settings-icon" style="background:#6B5CE7">🔊</div>
+                <span class="slider-label">볼륨</span>
+              </div>
+              <span class="slider-value" style="color:var(--accent)" id="vol-val">50%</span>
+            </div>
+            <input type="range" id="vol-slider" value="50" min="0" max="100"
+              style="background:linear-gradient(to right,var(--accent) 50%,rgba(107,92,231,.12) 50%)"
+              oninput="updateSlider(this,'vol-val','#6B5CE7')">
+          </div>
+          <div class="slider-row">
+            <div class="slider-label-row">
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="settings-icon" style="background:#A07828">☀️</div>
+                <span class="slider-label">밝기</span>
+              </div>
+              <span class="slider-value" style="color:#A07828" id="bright-val">80%</span>
+            </div>
+            <input type="range" id="bright-slider" value="80" min="0" max="100"
+              style="background:linear-gradient(to right,#A07828 80%,rgba(160,120,40,.12) 80%)"
+              oninput="updateSlider(this,'bright-val','#A07828')">
+          </div>
+        </div>
+
+        <div class="section-label">앱 정보</div>
+        <div class="settings-card">
+          <div class="settings-row" style="cursor:default">
+            <div class="settings-icon" style="background:#94A3B8">📡</div>
+            <div class="settings-info">
+              <div class="settings-title">디바이스 연결</div>
+              <div class="settings-sub">연결되지 않음</div>
+            </div>
+            <span class="chevron">›</span>
+          </div>
+          <div class="settings-row" style="cursor:default">
+            <div class="settings-icon" style="background:#6B5CE7">ℹ️</div>
+            <div class="settings-info">
+              <div class="settings-title">버전 정보</div>
+              <div class="settings-sub">Persona Frame v1.0.0 · 2026</div>
+            </div>
+          </div>
+          <div class="settings-row" onclick="showToast('로그아웃 되었습니다')">
+            <div class="settings-icon" style="background:rgba(217,64,64,.15)">🚪</div>
+            <div class="settings-info"><div class="settings-title" style="color:var(--red)">로그아웃</div></div>
+            <span style="color:rgba(217,64,64,.5)">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 바텀 네비 -->
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="switchTab('home',this)">
+        <div class="nav-pill"><span class="nav-icon">🏠</span><span class="nav-label">홈</span></div>
+      </div>
+      <div class="nav-item" onclick="switchTab('schedule',this)">
+        <div class="nav-pill"><span class="nav-icon">📅</span><span class="nav-label">일정</span></div>
+      </div>
+      <div class="nav-item" onclick="switchTab('manual',this)">
+        <div class="nav-pill"><span class="nav-icon">📖</span><span class="nav-label">메뉴얼</span></div>
+      </div>
+      <div class="nav-item" onclick="switchTab('settings',this)">
+        <div class="nav-pill"><span class="nav-icon">⚙️</span><span class="nav-label">설정</span></div>
+      </div>
+    </div>
+
+    <!-- 월 선택 모달 -->
+    <div class="overlay" id="month-modal" onclick="if(event.target===this)this.classList.remove('open')">
+      <div class="sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="modal-year-row">
+          <div class="modal-arrow" onclick="changeModalYear(-1)">‹</div>
+          <div class="modal-year" id="modal-year-label">2026년</div>
+          <div class="modal-arrow" onclick="changeModalYear(1)">›</div>
+        </div>
+        <div class="month-grid" id="month-grid"></div>
+      </div>
+    </div>
+
+    <!-- 일정 추가 시트 -->
+    <div class="overlay" id="add-sheet" onclick="if(event.target===this)this.classList.remove('open')">
+      <div class="sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="add-sheet-title">일정 추가</div>
+        <input class="add-input" id="add-title-input" placeholder="일정 제목을 입력하세요" />
+        <div class="time-row">
+          <div class="time-box"><div class="time-label">시작</div><div class="time-val" id="add-start">09:00</div></div>
+          <div class="time-box"><div class="time-label">종료</div><div class="time-val" id="add-end">10:00</div></div>
+        </div>
+        <button class="add-btn" onclick="addSchedule()">일정 추가</button>
+      </div>
+    </div>
+
+    <!-- 성격 선택 시트 -->
+    <div class="overlay" id="personality-sheet" onclick="if(event.target===this)this.classList.remove('open')">
+      <div class="sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+          <div style="width:34px;height:34px;background:var(--accent10);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px">🧠</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--t1)">퍼비 성격 선택</div>
+            <div style="font-size:10px;color:var(--t3)">AI 의 말투와 응답 스타일</div>
+          </div>
+        </div>
+        <div id="personality-list"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+const TODAY = new Date(2026, 3, 25);
+const DAYS  = ['일','월','화','수','목','금','토'];
+const COLORS = ['#3A78C9','#A07828','#2A9C70','#C08000','#7844C0','#D94040'];
+const PERSONALITIES = [
+  { label:'친근한',   icon:'❤️',  desc:'따뜻하고 다정하게 대화해요',   color:'#D94040' },
+  { label:'전문적인', icon:'💼',  desc:'정확하고 간결하게 답해요',      color:'#3A78C9' },
+  { label:'유쾌한',   icon:'😄',  desc:'유머 있고 활발하게 대화해요',   color:'#A07828' },
+  { label:'차분한',   icon:'🧘',  desc:'조용하고 침착하게 말해요',      color:'#2A9C70' },
+  { label:'엄격한',   icon:'💪',  desc:'집중력 있는 피드백을 줘요',     color:'#58566A' },
+];
+
+let viewYear = 2026, viewMonth = 4;
+let selectedDate = new Date(2026, 3, 25);
+let modalYear = 2026;
+let currentPersonality = '친근한';
+let schedules = [];
+let addStartH = 9;
+
+// 탭 전환
+function switchTab(tab, el) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + tab).classList.add('active');
+  el.classList.add('active');
+  if (tab === 'schedule') renderDateStrip();
+}
+
+// 날짜 스트립
+function renderDateStrip() {
+  const strip = document.getElementById('date-strip');
+  strip.innerHTML = '';
+  const daysInMonth = new Date(viewYear, viewMonth, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(viewYear, viewMonth - 1, d);
+    const isToday = date.toDateString() === TODAY.toDateString();
+    const isSel   = date.toDateString() === selectedDate.toDateString();
+    const cell = document.createElement('div');
+    cell.className = 'date-cell' + (isToday ? ' today' : '') + (isSel ? ' selected' : '');
+    cell.innerHTML = `<div class="date-day-label">${DAYS[date.getDay()]}</div><div class="date-num">${d}</div>`;
+    cell.onclick = () => { selectedDate = date; renderDateStrip(); renderSchedList(); };
+    strip.appendChild(cell);
+    if (isSel) setTimeout(() => cell.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }), 50);
+  }
+  document.getElementById('month-display').textContent = `${viewYear}년 ${viewMonth}월`;
+  renderSchedList();
+}
+
+function renderSchedList() {
+  const dateStr = fmtDate(selectedDate);
+  const list = schedules.filter(s => s.date === dateStr).sort((a,b) => a.time.localeCompare(b.time));
+
+  document.getElementById('selected-date-label').textContent = `${selectedDate.getMonth()+1}월 ${selectedDate.getDate()}일`;
+  const diff = Math.round((selectedDate - TODAY) / 86400000);
+  const relBadge = document.getElementById('date-rel-label');
+  const labels = { 0:'오늘', '-1':'어제', 1:'내일' };
+  relBadge.textContent = labels[diff] ?? (diff < 0 ? `${-diff}일 전` : `${diff}일 후`);
+  relBadge.className = 'date-rel-badge' + (diff < 0 && diff !== 0 ? ' past' : '');
+
+  const container = document.getElementById('sched-list');
+  if (!list.length) {
+    const isPast = selectedDate < TODAY;
+    container.innerHTML = `<div class="sched-empty">
+      <div class="sched-empty-icon">${isPast ? '📜' : '📅'}</div>
+      <div class="sched-empty-title">${isPast ? '이 날은 일정이 없었어요' : '아직 일정이 없어요'}</div>
+      <div class="sched-empty-sub">+ 버튼을 눌러 일정을 추가해보세요</div>
+    </div>`;
+  } else {
+    container.innerHTML = list.map(s => `
+      <div class="sched-card-item" onclick="toggleDone(${s.id})">
+        <div class="sched-card-bar" style="background:${s.done?'#D0CFF0':s.color}"></div>
+        <div class="sched-card-body">
+          <div class="sched-card-dot" style="background:${s.done?'#D0CFF0':s.color}"></div>
+          <div class="sched-card-info">
+            <div class="sched-card-time">${s.time}</div>
+            <div class="sched-card-title ${s.done?'done':''}">${s.title}</div>
+          </div>
+          ${s.done?'<div class="done-badge">완료</div>':''}
+        </div>
+      </div>`).join('');
+  }
+  updateHomeSched();
+}
+
+function toggleDone(id) {
+  const s = schedules.find(x => x.id === id);
+  if (s) { s.done = !s.done; renderSchedList(); }
+}
+
+function updateHomeSched() {
+  const todayStr = fmtDate(TODAY);
+  const list = schedules.filter(s => s.date === todayStr);
+  document.getElementById('home-sched-count').textContent = list.length + '개';
+  const el = document.getElementById('home-sched-list');
+  if (!list.length) {
+    el.innerHTML = `<div style="text-align:center;padding:12px 0;font-size:12px;color:var(--t3)">등록된 일정이 없습니다.</div>`;
+  } else {
+    el.innerHTML = list.map(s => `
+      <div class="sched-item ${s.isNow?'now':''}">
+        <div class="sched-dot" style="background:${s.color}"></div>
+        <div class="sched-info">
+          <div class="sched-time">${s.time}</div>
+          <div class="sched-title-text ${s.done?'done':''}">${s.title}</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// 오늘로
+function goToday() {
+  selectedDate = new Date(TODAY); viewYear = 2026; viewMonth = 4;
+  renderDateStrip();
+}
+
+// 월 선택 모달
+function openMonthModal() {
+  modalYear = viewYear;
+  document.getElementById('modal-year-label').textContent = `${modalYear}년`;
+  renderMonthGrid();
+  document.getElementById('month-modal').classList.add('open');
+}
+function changeModalYear(d) {
+  modalYear += d;
+  document.getElementById('modal-year-label').textContent = `${modalYear}년`;
+  renderMonthGrid();
+}
+function renderMonthGrid() {
+  const grid = document.getElementById('month-grid');
+  grid.innerHTML = '';
+  for (let m = 1; m <= 12; m++) {
+    const isSel = modalYear===viewYear && m===viewMonth;
+    const isCur = modalYear===2026 && m===4;
+    const cell = document.createElement('div');
+    cell.className = 'month-cell'+(isSel?' selected':'')+(isCur&&!isSel?' current':'');
+    cell.textContent = `${m}월`;
+    cell.onclick = () => {
+      viewYear=modalYear; viewMonth=m;
+      selectedDate = new Date(viewYear,viewMonth-1,1);
+      document.getElementById('month-modal').classList.remove('open');
+      renderDateStrip();
+    };
+    grid.appendChild(cell);
+  }
+}
+
+// 일정 추가
+function openAddSheet() {
+  document.getElementById('add-title-input').value='';
+  document.getElementById('add-start').textContent = `${String(addStartH).padStart(2,'0')}:00`;
+  document.getElementById('add-end').textContent   = `${String(addStartH+1).padStart(2,'0')}:00`;
+  document.getElementById('add-sheet').classList.add('open');
+  setTimeout(()=>document.getElementById('add-title-input').focus(),300);
+}
+function addSchedule() {
+  const title = document.getElementById('add-title-input').value.trim();
+  if (!title) { showToast('제목을 입력해주세요'); return; }
+  const time = document.getElementById('add-start').textContent;
+  schedules.push({ id:Date.now(), date:fmtDate(selectedDate), time, title, color:COLORS[schedules.length%COLORS.length], done:false, isNow:false });
+  document.getElementById('add-sheet').classList.remove('open');
+  addStartH = (addStartH+1)%23;
+  renderSchedList();
+  showToast('✅ 일정이 추가되었습니다');
+}
+
+// 성격 선택
+function openPersonalitySheet() {
+  const list = document.getElementById('personality-list');
+  list.innerHTML = PERSONALITIES.map(p => {
+    const sel = p.label===currentPersonality;
+    return `<div class="personality-item${sel?' selected':''}"
+      style="background:${sel?p.color+'14':'transparent'};border:${sel?`1.5px solid ${p.color}80`:'1px solid var(--border)'}"
+      onclick="selectPersonality('${p.label}')">
+      <div class="personality-icon-box" style="background:${p.color}${sel?'2e':'14'}">${p.icon}</div>
+      <div class="personality-info">
+        <div class="personality-name" style="color:${sel?p.color:'var(--t2)'}">${p.label}</div>
+        <div class="personality-desc">${p.desc}</div>
+      </div>
+      ${sel?`<span style="color:${p.color};font-size:16px">✓</span>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('personality-sheet').classList.add('open');
+}
+function selectPersonality(label) {
+  currentPersonality = label;
+  document.getElementById('personality-badge').textContent = label;
+  document.getElementById('personality-sheet').classList.remove('open');
+  showToast(`성격이 '${label}'(으)로 변경되었습니다`);
+}
+
+// 다크 모드
+function toggleDarkMode() {
+  const toggle = document.getElementById('dark-toggle');
+  toggle.classList.toggle('on');
+  const isDark = toggle.classList.contains('on');
+  document.getElementById('dark-label').textContent = isDark ? '다크 모드' : '라이트 모드';
+  document.getElementById('dark-icon').textContent  = isDark ? '🌙' : '☀️';
+  const p = document.getElementById('phoneInner');
+  if (isDark) {
+    p.style.setProperty('--bg','#13111C'); p.style.setProperty('--panel','#1C1A2A');
+    p.style.setProperty('--t1','#EEEDF8'); p.style.setProperty('--t2','#9895B0');
+    p.style.setProperty('--t3','#5C5A74'); p.style.setProperty('--border','rgba(107,92,231,0.31)');
+  } else {
+    p.style.setProperty('--bg','#F2F4F7'); p.style.setProperty('--panel','#ffffff');
+    p.style.setProperty('--t1','#181620'); p.style.setProperty('--t2','#58566A');
+    p.style.setProperty('--t3','#A09EB8'); p.style.setProperty('--border','#EAECF0');
+  }
+}
+
+// 슬라이더
+function updateSlider(el, valId, color) {
+  const v = el.value;
+  document.getElementById(valId).textContent = v + '%';
+  const rgb = color.slice(1).match(/../g).map(x=>parseInt(x,16)).join(',');
+  el.style.background = `linear-gradient(to right,${color} ${v}%,rgba(${rgb},.12) ${v}%)`;
+}
+
+// 토스트
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+function fmtDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+renderDateStrip();
+</script>
+</body>
+</html>
