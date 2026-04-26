@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI - Purby | 9주차 발표</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #1A1236;
+    transition: background 0.4s ease;
+  }
+  code { font-family: 'Consolas', 'Courier New', monospace; }
+  button { font-family: inherit; cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+
+  /* 레이아웃 */
+  #app { display: flex; flex-direction: column; width: 100vw; height: 100vh; }
+  #header {
+    height: 52px; background: #1A1236; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 32px; flex-shrink: 0;
+    border-bottom: 1px solid rgba(107,92,231,0.3);
+  }
+  #header-left { display: flex; align-items: center; gap: 12px; }
+  #logo {
+    width: 28px; height: 28px; border-radius: 6px; background: #6B5CE7;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+  }
+  #header-title { color: #fff; font-weight: 600; font-size: 14px; }
+  #header-sub { color: #8B88AA; font-size: 12px; }
+  #nav-tabs { display: flex; align-items: center; gap: 4px; }
+  .nav-tab {
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: #8B88AA; font-size: 11px; padding: 4px 8px;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .nav-tab.active { color: #6B5CE7; border-bottom-color: #6B5CE7; font-weight: 700; }
+
+  #slide-wrapper {
+    flex: 1; overflow: hidden; display: flex; flex-direction: column;
+    animation: fadeSlide 0.35s ease forwards;
+  }
+  #slide-header {
+    padding: 18px 5% 0; display: flex;
+    justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+  }
+  #slide-header h2 { font-size: 22px; font-weight: 700; }
+  #slide-header span { font-size: 11px; color: #8B88AA; letter-spacing: 1px; }
+  #slide-body { flex: 1; overflow: hidden; }
+
+  #footer {
+    height: 48px; background: #1A1236; display: flex; align-items: center;
+    justify-content: center; gap: 20px; flex-shrink: 0;
+    border-top: 1px solid rgba(107,92,231,0.2);
+  }
+  .nav-btn {
+    background: none; border: 1px solid rgba(107,92,231,0.4); border-radius: 6px;
+    color: #9B8FFF; padding: 4px 14px; font-size: 13px; transition: all 0.2s;
+  }
+  .nav-btn.next { background: #6B5CE7; border-color: #6B5CE7; color: #fff; }
+  .nav-btn:disabled { opacity: 0.4; background: none; }
+  #dots { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    height: 7px; border-radius: 4px; cursor: pointer;
+    background: rgba(139,136,170,0.4); transition: all 0.3s ease;
+  }
+  .dot.active { background: #6B5CE7; }
+  #progress-bar { height: 3px; background: #251B4B; flex-shrink: 0; }
+  #progress-fill { height: 100%; background: #6B5CE7; transition: width 0.4s ease; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 슬라이드 공통 */
+  .slide { padding: 0 4%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+  .card-white {
+    background: #fff; border-radius: 12px; padding: 20px;
+    border: 1px solid #E8E3FF;
+  }
+  .card-dark {
+    background: #251B4B; border-radius: 12px; padding: 20px;
+    border: 1px solid rgba(107,92,231,0.3);
+  }
+  .card-left-border { border-left: 4px solid #6B5CE7; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .label-sm { font-size: 13px; color: #6B6884; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .badge-done { background: rgba(34,197,94,0.15); color: #22C55E; border: 1px solid rgba(34,197,94,0.35); }
+  .badge-wip  { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.35); }
+  .divider { border: none; border-bottom: 1px solid rgba(107,92,231,0.15); margin: 0; }
+
+  /* S1: 타이틀 */
+  #s-title { display: flex; height: 100%; align-items: center; padding: 0 5%; gap: 40px; }
+  #s-title-left { flex: 1; }
+  .week-badge {
+    display: inline-block; padding: 4px 14px; border-radius: 8px;
+    background: #6B5CE7; color: #fff; font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; margin-bottom: 24px;
+  }
+  #s-title h1 { font-size: clamp(48px,7vw,80px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 12px; }
+  #s-title p.sub { font-size: clamp(16px,2.2vw,22px); color: #9B8FFF; margin-bottom: 32px; }
+  #title-divider { width: 120px; height: 3px; background: #6B5CE7; border-radius: 2px; margin-bottom: 28px; }
+  #title-team { color: #8B88AA; font-size: 14px; letter-spacing: 0.5px; }
+  #title-cards { width: 260px; display: flex; flex-direction: column; gap: 12px; }
+  .title-card {
+    background: #251B4B; border-radius: 10px; padding: 14px 18px;
+  }
+  .title-card .tc-label { font-size: 11px; color: #8B88AA; margin-bottom: 4px; }
+  .title-card .tc-val { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .progress-track { height: 5px; background: #2D2456; border-radius: 3px; }
+  .progress-fill-anim { height: 100%; border-radius: 3px; transition: width 1.2s ease; }
+
+  /* S3: Flutter */
+  .tab-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #F5F3FF; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;
+  }
+  .tab-num {
+    width: 28px; height: 28px; border-radius: 50%; background: #6B5CE7; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .feat-row {
+    background: #F5F3FF; border-radius: 8px; padding: 12px 14px;
+    margin-bottom: 10px; border-left: 3px solid #6B5CE7;
+  }
+
+  /* S4: FastAPI */
+  .ep-row {
+    display: flex; align-items: center; gap: 8px; padding: 5px 0;
+    border-bottom: 1px solid rgba(107,92,231,0.15);
+  }
+  .method-badge {
+    min-width: 54px; padding: 2px 0; border-radius: 4px;
+    font-size: 10px; font-weight: 700; text-align: center;
+  }
+  .dir-row {
+    display: flex; align-items: center; gap: 12px; padding: 7px 0;
+    border-bottom: 1px solid rgba(107,92,231,0.15);
+  }
+
+  /* S5: AWS */
+  .arch-boxes { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .arch-box { border-radius: 10px; padding: 16px 22px; color: #fff; text-align: center; min-width: 160px; }
+  .arch-arrow { display: flex; flex-direction: column; align-items: center; padding: 0 8px; }
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+
+  /* S6: DB */
+  .db-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .db-table { background: #251B4B; border-radius: 10px; overflow: hidden; }
+  .db-thead { padding: 8px 14px; }
+  .db-row { display: flex; justify-content: space-between; padding: 6px 14px; font-size: 12px; }
+  .db-row.alt { background: #1E1538; }
+  .db-footer {
+    background: #251B4B; border-radius: 8px; padding: 10px 16px;
+    border: 1px solid rgba(107,92,231,0.3); font-size: 12px; color: #8B88AA;
+    text-align: center; margin-top: 12px;
+  }
+
+  /* S8: Q&A */
+  #s-qa { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .qa-circle {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(107,92,231,0.13); display: flex; align-items: center;
+    justify-content: center; margin-bottom: 32px;
+    border: 2px solid rgba(107,92,231,0.3);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- 헤더 -->
+  <div id="header">
+    <div id="header-left">
+      <div id="logo">AI</div>
+      <span id="header-title">AI - Purby</span>
+      <span id="header-sub">9주차 발표</span>
+    </div>
+    <div id="nav-tabs"></div>
+  </div>
+
+  <!-- 슬라이드 -->
+  <div id="slide-wrapper">
+    <div id="slide-header" style="display:none">
+      <h2 id="slide-title-text"></h2>
+      <span id="slide-label-text"></span>
+    </div>
+    <div id="slide-body"></div>
+  </div>
+
+  <!-- 푸터 -->
+  <div id="footer">
+    <button class="nav-btn prev-btn" id="btn-prev">← 이전</button>
+    <div id="dots"></div>
+    <button class="nav-btn next nav-btn" id="btn-next">다음 →</button>
+  </div>
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+</div>
+
+<script>
+const C = {
+  purple:"#6B5CE7", purpleL:"#9B8FFF", bg:"#1A1236",
+  card:"#251B4B", muted:"#8B88AA", mutedL:"#6B6884",
+  text:"#1E1240", lightBg:"#F5F3FF",
+  green:"#22C55E", amber:"#F59E0B", blue:"#60A5FA", red:"#F87171"
+};
+
+// ── 슬라이드 데이터 ──────────────────────────────────────────
+const SLIDES = [
+  { label:"타이틀",    header:"",              sub:"",                   dark:true  },
+  { label:"진행 요약", header:"이번 주 진행 요약",     sub:"WEEK 09 SUMMARY",    dark:false },
+  { label:"Flutter 앱",header:"Flutter 앱 개발 현황", sub:"MOBILE CLIENT",       dark:false },
+  { label:"이메일 인증", header:"이메일 인증 플로우", sub:"EMAIL AUTH",          dark:false },
+  { label:"JWT 자동 로그인", header:"JWT 자동 로그인", sub:"AUTO LOGIN",         dark:false },
+  { label:"백엔드 API 연동", header:"백엔드 API 연동", sub:"BACKEND SYNC",       dark:false },
+  { label:"성격 커스터마이징", header:"성격 커스터마이징", sub:"AI PERSONALITY",    dark:false },
+  { label:"일정 CRUD", header:"일정 CRUD + 상태 동기화", sub:"SCHEDULE SYNC",    dark:false },
+  { label:"전역 상태 관리", header:"전역 상태 관리 구조", sub:"STATE PATTERN",     dark:false },
+  { label:"데모",       header:"",             sub:"",                   dark:false },
+  { label:"FastAPI",   header:"FastAPI 백엔드 현황",  sub:"BACKEND",            dark:true  },
+  { label:"AWS 인프라",header:"AWS 인프라 구축",      sub:"INFRASTRUCTURE",     dark:false },
+  { label:"DB 설계",   header:"DB 설계 및 구현",      sub:"DATABASE",           dark:true  },
+  { label:"향후 계획", header:"향후 계획",            sub:"NEXT STEPS",         dark:false },
+  { label:"Q&A",       header:"",              sub:"",                   dark:true  },
+];
+
+// ── 슬라이드 렌더 함수 ───────────────────────────────────────
+function renderSlide(idx) {
+  switch(idx) {
+    case 0: return slide_title();
+    case 1: return slide_summary();
+    case 2: return slide_flutter();
+    case 3: return slide_email_auth();
+    case 4: return slide_jwt_autologin();
+    case 5: return slide_backend_api();
+    case 6: return slide_personality();
+    case 7: return slide_schedule_crud();
+    case 8: return slide_global_state();
+    case 9: return `<div style="height:100%;display:flex;align-items:center;justify-content:center;"><iframe src="purby_phone.html" width="340" height="700" style="border:none;background:transparent;" scrolling="no"></iframe></div>`;
+    case 10: return slide_fastapi();
+    case 11: return slide_aws();
+    case 12: return slide_db();
+    case 13: return slide_nextsteps();
+    case 14: return slide_qa();
+    default: return "";
+  }
+}
+
+function slide_email_auth() {
+  const points = [
+    { icon:"1", text:"단순 가입이 아닌 이메일 인증 3단계 플로우 구현" },
+    { icon:"2", text:"백엔드 FastAPI와 실제 HTTP 통신" },
+    { icon:"3", text:"인증 전엔 가입 버튼 비활성화 (_codeVerified 상태 관리)" },
+  ];
+  const code = `final response = await http.post(
+  Uri.parse(
+    'http://10.0.2.2:8000/auth/send-code',
+  ),
+  body: jsonEncode({'email': email}),
+);`;
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 코드 블록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">signup_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.7;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> <span style="color:#60A5FA;">http</span>.<span style="color:#22C55E;">post</span>(
+  Uri.<span style="color:#22C55E;">parse</span>(
+    <span style="color:#F59E0B;">'http://10.0.2.2:8000/auth/send-code'</span>,
+  ),
+  body: <span style="color:#60A5FA;">jsonEncode</span>({<span style="color:#F59E0B;">'email'</span>: email}),
+);</pre>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_jwt_autologin() {
+  const points = [
+    { icon:"1", text:"앱 시작 시 토큰 유무 자동 확인" },
+    { icon:"2", text:"로그인 상태 유지 — 재로그인 불필요" },
+    { icon:"3", text:"SharedPreferences로 토큰 로컬 저장" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 코드 블록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12.5px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_checkAutoLogin</span>() <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#9B8FFF;">final</span> prefs = <span style="color:#9B8FFF;">await</span> SharedPreferences.<span style="color:#22C55E;">getInstance</span>();
+  <span style="color:#9B8FFF;">final</span> token = prefs.<span style="color:#22C55E;">getString</span>(<span style="color:#F59E0B;">'auth_token'</span>) ?? <span style="color:#F59E0B;">''</span>;
+  <span style="color:#9B8FFF;">if</span> ((prefs.<span style="color:#22C55E;">getBool</span>(<span style="color:#F59E0B;">'logged_in'</span>) ?? <span style="color:#60A5FA;">false</span>)
+      && token.<span style="color:#22C55E;">isNotEmpty</span>) {
+    <span style="color:#22C55E;">setState</span>(() {
+      _token = token;
+      _loggedIn = <span style="color:#60A5FA;">true</span>;
+    });
+  }
+}</pre>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">SHARED PREFERENCES</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_backend_api() {
+  const points = [
+    { icon:"1", text:"설정 변경 즉시 서버 PATCH 요청" },
+    { icon:"2", text:"JWT Bearer Token 인증 헤더 포함" },
+    { icon:"3", text:"로컬 setState + 서버 동기화 동시 처리" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_patchSettings</span>(
+  <span style="color:#9B8FFF;">Map</span>&lt;<span style="color:#9B8FFF;">String</span>, <span style="color:#9B8FFF;">dynamic</span>&gt; updates) <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">patch</span>(
+    Uri.<span style="color:#22C55E;">parse</span>(<span style="color:#F59E0B;">'http://10.0.2.2:8000/settings'</span>),
+    headers: {
+      <span style="color:#F59E0B;">'Authorization'</span>:
+        <span style="color:#F59E0B;">'Bearer \${widget.token}'</span>},
+    body: <span style="color:#60A5FA;">jsonEncode</span>(updates),
+  );
+}
+<span style="color:#8B88AA;">// 토글 하나 바꿀 때마다 즉시 서버 반영</span>
+<span style="color:#22C55E;">onChanged</span>: (v) {
+  <span style="color:#22C55E;">setState</span>(() => sleepEnabled = v);
+  <span style="color:#22C55E;">_patchSettings</span>({<span style="color:#F59E0B;">'sleep_enabled'</span>: v});
+}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI PATCH</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_personality() {
+  const points = [
+    { icon:"1", text:"선택한 성격이 AI 응답 스타일에 반영" },
+    { icon:"2", text:"선택 즉시 PATCH /settings로 서버 저장" },
+    { icon:"3", text:"앱의 핵심 차별점" },
+  ];
+  const personas = [
+    { label:"친근한",  icon:"♥", desc:"따뜻하고 다정하게 대화해요" },
+    { label:"전문적인", icon:"💼", desc:"정확하고 간결하게 답해요" },
+    { label:"유쾌한",  icon:"😄", desc:"유머 있고 활발하게 대화해요" },
+    { label:"차분한",  icon:"🧘", desc:"조용하고 침착하게 말해요" },
+    { label:"엄격한",  icon:"🏋", desc:"집중력 있는 피드백을 줘요" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 성격 카드 목록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:8px;">
+          ${personas.map((p, i) => `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:${i===0?'rgba(107,92,231,0.25)':'rgba(255,255,255,0.04)'};border:1px solid ${i===0?'rgba(107,92,231,0.6)':'rgba(255,255,255,0.06)'};">
+            <span style="font-size:18px;width:28px;text-align:center;">${p.icon}</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:${i===0?'#9B8FFF':'#E2E0FF'}">${p.label}</div>
+              <div style="font-size:11px;color:#8B88AA;margin-top:1px">${p.desc}</div>
+            </div>
+            ${i===0?`<div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#6B5CE7;"></div>`:''}
+          </div>`).join("")}
+        </div>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">AI PERSONA SYSTEM</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_schedule_crud() {
+  const points = [
+    { icon:"1", text:"홈 화면 일정 카드와 일정 화면이 상태 공유" },
+    { icon:"2", text:"스와이프로 삭제 (Dismissible 위젯)" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">schedule_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 오늘 일정 불러오기</span>
+<span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">get</span>(
+  Uri.<span style="color:#22C55E;">parse</span>(
+    <span style="color:#F59E0B;">'http://10.0.2.2:8000/schedules?date=$dateStr'</span>,
+  ),
+  headers: {
+    <span style="color:#F59E0B;">'Authorization'</span>: <span style="color:#F59E0B;">'Bearer \${widget.token}'</span>
+  },
+);
+
+<span style="color:#8B88AA;">// 완료 처리 — 탭 한 번으로</span>
+<span style="color:#22C55E;">onTap</span>: () <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#22C55E;">setState</span>(() => s[<span style="color:#F59E0B;">'done'</span>] = !s[<span style="color:#F59E0B;">'done'</span>]);
+  <span style="color:#8B88AA;">// 즉시 UI 반영</span>
+  <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">patch</span>(
+    <span style="color:#F59E0B;">'.../schedules/\${s[\'id\']}/done'</span>,
+  );
+}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">STATE MANAGEMENT</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+
+        <!-- 흐름도 -->
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;margin-top:4px;">
+          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">상태 흐름</p>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            ${[
+              {label:"스와이프", color:"#F87171"},
+              {label:"→", color:"#8B88AA"},
+              {label:"DELETE API", color:"#6B5CE7"},
+              {label:"→", color:"#8B88AA"},
+              {label:"setState", color:"#22C55E"},
+              {label:"→", color:"#8B88AA"},
+              {label:"홈 갱신", color:"#F59E0B"},
+            ].map(b => b.label === "→"
+              ? `<span style="color:${b.color};font-size:14px">${b.label}</span>`
+              : `<span style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}55;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">${b.label}</span>`
+            ).join("")}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_global_state() {
+  const points = [
+    { icon:"1", text:"별도 상태 관리 라이브러리 없이 콜백 패턴으로 전역 상태 처리" },
+    { icon:"2", text:"isDark 토글 하나로 앱 전체 테마 실시간 변경" },
+    { icon:"3", text:"aiName 변경 시 홈 화면 인사말 즉시 반영" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:11.5px;line-height:1.8;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 최상위에서 상태 관리</span>
+<span style="color:#8B88AA;">// → 하위 위젯에 콜백으로 전달</span>
+<span style="color:#9B8FFF;">MaterialApp</span>(
+  home: _loggedIn
+    ? <span style="color:#9B8FFF;">MainScreen</span>(
+        isDark:       _isDark,
+        aiName:       _aiName,
+        token:        _token,
+        <span style="color:#22C55E;">onDarkToggle</span>: _setDark,
+        <span style="color:#8B88AA;">// 설정 → 앱 전체 테마 변경</span>
+        <span style="color:#22C55E;">onNameChange</span>: (n) => ...,
+        <span style="color:#8B88AA;">// 설정 → 홈 인사말 변경</span>
+        <span style="color:#22C55E;">onLogout</span>:     _logout,
+      )
+    : <span style="color:#9B8FFF;">AuthScreen</span>(<span style="color:#22C55E;">onLogin</span>: _login),
+)</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">CALLBACK PATTERN</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+
+        <!-- 구조 흐름도 -->
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;">
+          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">위젯 트리</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${[
+              { label:"main.dart (최상위 상태)", color:"#6B5CE7", indent:0 },
+              { label:"MainScreen (token, aiName, isDark)", color:"#9B8FFF", indent:1 },
+              { label:"HomeTab  ←  aiName", color:"#22C55E", indent:2 },
+              { label:"SettingsTab  →  onDarkToggle", color:"#F59E0B", indent:2 },
+            ].map(n => `
+            <div style="display:flex;align-items:center;gap:8px;padding-left:${n.indent*20}px;">
+              <div style="width:8px;height:8px;border-radius:2px;background:${n.color};flex-shrink:0;"></div>
+              <span style="font-size:11px;color:#1E1240;font-family:Consolas,'Courier New',monospace;">${n.label}</span>
+            </div>`).join("")}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_blank(num) {
+  return `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+    <div style="width:60px;height:60px;border-radius:50%;border:2px dashed rgba(107,92,231,0.4);display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:22px;font-weight:700;color:rgba(107,92,231,0.5)">${num}</span>
+    </div>
+    <p style="font-size:13px;color:rgba(107,92,231,0.4);letter-spacing:1px;">슬라이드를 채워주세요</p>
+  </div>`;
+}
+
+function slide_title() {
+  const cards = [
+    {label:"Flutter 앱", val:90, color:C.purple},
+    {label:"FastAPI 백엔드", val:85, color:C.purpleL},
+    {label:"AWS 인프라", val:70, color:C.amber},
+    {label:"DB 구현", val:80, color:C.green},
+  ];
+  return `
+  <div id="s-title">
+    <div id="s-title-left">
+      <div class="week-badge">WEEK 09</div>
+      <h1>AI - Purby</h1>
+      <p class="sub">주간 진행 상황 보고</p>
+      <div id="title-divider"></div>
+      <p id="title-team">팀장 김규민&nbsp;&nbsp;|&nbsp;&nbsp;팀원 유승민&nbsp;&nbsp;|&nbsp;&nbsp;팀원 신준수</p>
+    </div>
+    <div id="title-cards">
+      ${cards.map(c => `
+        <div class="title-card" style="border:1px solid ${c.color}44">
+          <div class="tc-label">${c.label}</div>
+          <div class="tc-val" style="color:${c.color}">${c.val}%</div>
+          <div class="progress-track">
+            <div class="progress-fill-anim" style="width:${c.val}%;background:${c.color}"></div>
+          </div>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function slide_summary() {
+  const items = [
+    { icon:"</>", title:"Flutter 앱 개발", status:"완료",
+      items:["스케줄 CRUD (swipe 삭제, 탭으로 완료 처리)","다크/라이트 모드 토글"] },
+    { icon:"⚡", title:"FastAPI 백엔드", status:"완료",
+      items:["다중 파일 아키텍처 리팩토링","JWT 인증 + 이메일 확인 API","Settings GET/PATCH 엔드포인트 구현"] },
+    { icon:"☁", title:"AWS 인프라", status:"진행중",
+      items:["EC2 인스턴스 (purby-server) 세팅","PostgreSQL DB 클라우드 마이그레이션","AWS CLI v2 + SSM 플러그인 설치"] },
+    { icon:"🗄", title:"DB 설계 및 구현", status:"완료",
+      items:["purby DB 스키마 설계 완료","psycopg2-binary 연동 (Python 3.13 호환)","Alembic 마이그레이션 준비"] },
+  ];
+  return `
+  <div class="slide">
+    <div class="grid-2">
+      ${items.map(it => `
+        <div class="card-white card-left-border">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:34px;border-radius:50%;background:${C.purple};display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff">${it.icon}</div>
+              <span style="font-weight:700;font-size:15px;color:${C.text}">${it.title}</span>
+            </div>
+            <span class="badge ${it.status==="완료"?"badge-done":"badge-wip"}">${it.status}</span>
+          </div>
+          ${it.items.map(t=>`
+            <div style="display:flex;gap:6px;margin-bottom:5px">
+              <span style="color:${C.purple};font-weight:700;font-size:13px">•</span>
+              <span style="font-size:12px;color:${C.mutedL}">${t}</span>
+            </div>`).join("")}
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function slide_flutter() {
+  const tabs = [
+    {name:"Home",    desc:"날씨 + 옆간 설정"},
+    {name:"Schedule",desc:"CRUD + swipe 삭제 + 완료 토글"},
+    {name:"Settings",desc:"AI 이름 / 다크모드 / 관리"},
+    {name:"매뉴얼",   desc:"사용법 가이드"},
+  ];
+  const feats = [
+    {title:"Schedule CRUD",     detail:"swipe-to-delete, tap-to-complete / 실시간 상태 업데이트"},
+    {title:"다크 / 라이트 모드",  detail:"#6B5CE7 엑센트 기반 / 세션 중 테마 유지"},
+    {title:"APK 빌드 대상",      detail:"flutter build apk --release / 팀 데모 배포용"},
+  ];
+  return `
+  <div class="slide">
+    <div class="grid-2">
+      <div class="card-white">
+        <p class="label-sm">앱 구조 (Tab Navigation)</p>
+        ${tabs.map((t,i)=>`
+          <div class="tab-row">
+            <div class="tab-num">${i+1}</div>
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:13px;color:${C.text}">${t.name}</div>
+              <div style="font-size:11px;color:${C.mutedL}">${t.desc}</div>
+            </div>
+            <span style="color:${C.purple};font-size:16px">✓</span>
+          </div>`).join("")}
+      </div>
+      <div class="card-white">
+        <p class="label-sm">구현 핵심 기능</p>
+        ${feats.map(f=>`
+          <div class="feat-row">
+            <div style="font-weight:700;font-size:14px;color:${C.text};margin-bottom:4px">${f.title}</div>
+            <div style="font-size:11px;color:${C.mutedL}">${f.detail}</div>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+function slide_fastapi() {
+  const dirs = [
+    {name:"api/",       color:C.purple,  desc:"라우터 및 엔드포인트"},
+    {name:"core/",      color:C.purpleL, desc:"설정 / 보안"},
+    {name:"crud/",      color:C.green,   desc:"DB CRUD 로직"},
+    {name:"schemas/",   color:C.amber,   desc:"데이터 모델 (Pydantic)"},
+    {name:"services/",  color:C.blue,    desc:"비즈니스 로직"},
+    {name:"utils/",     color:C.red,     desc:"헬퍼 함수"},
+  ];
+  const eps = [
+    {m:"POST",  p:"/auth/send-code",   d:"이메일 인증코드 발송"},
+    {m:"POST",  p:"/auth/verify-code", d:"코드 검증"},
+    {m:"POST",  p:"/auth/register",    d:"회원가입"},
+    {m:"POST",  p:"/auth/login",       d:"JWT 토큰 발급"},
+    {m:"GET",   p:"/schedules",        d:"일정 목록 조회"},
+    {m:"POST",  p:"/schedules",        d:"일정 생성"},
+    {m:"PATCH", p:"/schedules/{id}",   d:"일정 수정/완료"},
+    {m:"DELETE",p:"/schedules/{id}",   d:"일정 삭제"},
+    {m:"GET",   p:"/settings",         d:"AI 설정 조회"},
+    {m:"PATCH", p:"/settings",         d:"AI 설정 수정"},
+  ];
+  const mc = {POST:C.green, GET:C.blue, PATCH:C.amber, DELETE:C.red};
+  return `
+  <div class="slide">
+    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:20px">
+      <div class="card-dark">
+        <p class="label-sm" style="color:${C.purpleL}">프로젝트 아키텍처</p>
+        ${dirs.map(d=>`
+          <div class="dir-row">
+            <code style="color:${d.color};font-weight:700;font-size:13px;min-width:90px">${d.name}</code>
+            <span style="font-size:11px;color:${C.muted}">${d.desc}</span>
+          </div>`).join("")}
+      </div>
+      <div class="card-dark">
+        <p class="label-sm" style="color:${C.purpleL}">구현된 API 엔드포인트</p>
+        ${eps.map(ep=>`
+          <div class="ep-row">
+            <span class="method-badge" style="background:${mc[ep.m]}33;color:${mc[ep.m]}">${ep.m}</span>
+            <code style="color:${C.purpleL};font-size:11px;flex:1">${ep.p}</code>
+            <span style="font-size:10px;color:${C.muted}">${ep.d}</span>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+function slide_aws() {
+  const boxes = [
+    {label:"Flutter 앱",  sub:"Windows / Android Studio", color:C.purple},
+    {label:"FastAPI",     sub:"EC2 (purby-server)\nap-northeast-2", color:"#1C7293"},
+    {label:"PostgreSQL",  sub:"EC2 내부\npurby DB", color:C.green},
+  ];
+  const tasks = [
+    {t:"EC2 인스턴스 (purby-server) 생성 완료", done:true},
+    {t:"AWS CLI v2 설치 완료", done:true},
+    {t:"SSM Session Manager Plugin 설치 완료", done:true},
+    {t:"로컬 persona_frame → AWS purby DB 마이그레이션", done:true},
+    {t:"aws configure (Access Key 수령 후 완료)", done:true},
+    {t:"SSH 터널 pgAdmin4 연결 확인", done:false},
+    {t:"Alembic 테이블 마이그레이션 AWS DB 적용", done:false},
+  ];
+  return `
+  <div class="slide" style="gap:20px">
+    <div class="arch-boxes">
+      ${boxes.map((b,i)=>`
+        <div style="display:flex;align-items:center">
+          <div class="arch-box" style="background:${b.color}">
+            <div style="font-weight:700;font-size:15px">${b.label}</div>
+            <div style="font-size:10px;opacity:0.8;margin-top:4px;white-space:pre-line">${b.sub}</div>
+          </div>
+          ${i<2?`<div class="arch-arrow">
+            <span style="font-size:10px;color:${C.muted};margin-bottom:2px">REST API</span>
+            <span style="color:${C.muted};font-size:18px">→</span>
+          </div>`:""}
+        </div>`).join("")}
+    </div>
+    <div class="card-white">
+      <p class="label-sm">구축 현황</p>
+      <div class="checklist">
+        ${tasks.map(t=>`
+          <div class="check-item" style="color:${t.done?C.text:C.amber}">
+            <span>${t.done?"✅":"⚠️"}</span>
+            <span>${t.t}</span>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+function slide_db() {
+  const tables = [
+    {name:"users",      color:C.purple,
+     cols:[{n:"id",t:"UUID / PK"},{n:"email",t:"VARCHAR UNIQUE"},{n:"password",t:"VARCHAR (bcrypt)"},{n:"created_at",t:"TIMESTAMP"}]},
+    {name:"schedules",  color:C.green,
+     cols:[{n:"user_id",t:"UUID / FK→users"},{n:"title",t:"VARCHAR"},{n:"date",t:"DATE"},{n:"is_completed",t:"BOOLEAN"},{n:"created_at",t:"TIMESTAMP"}]},
+    {name:"settings",   color:C.amber,
+     cols:[{n:"user_id",t:"UUID / FK→users"},{n:"ai_name",t:"VARCHAR"},{n:"personality",t:"VARCHAR"},{n:"volume / brightness",t:"INTEGER"}]},
+    {name:"email_codes",color:C.blue,
+     cols:[{n:"email",t:"VARCHAR"},{n:"code",t:"VARCHAR(6)"},{n:"expires_at",t:"TIMESTAMP"},{n:"is_used",t:"BOOLEAN"}]},
+  ];
+  return `
+  <div class="slide">
+    <div class="db-grid">
+      ${tables.map(tbl=>`
+        <div class="db-table" style="border:1px solid ${tbl.color}44">
+          <div class="db-thead" style="background:${tbl.color}22;border-bottom:1px solid ${tbl.color}44">
+            <code style="color:${tbl.color};font-weight:700;font-size:14px">${tbl.name}</code>
+          </div>
+          ${tbl.cols.map((c,i)=>`
+            <div class="db-row${i%2===0?" alt":""}">
+              <code style="color:#fff">${c.n}</code>
+              <span style="color:${C.muted}">${c.t}</span>
+            </div>`).join("")}
+        </div>`).join("")}
+    </div>
+    <div class="db-footer">
+      기술스택: PostgreSQL 18 (AWS EC2) &nbsp;|&nbsp; psycopg2-binary &nbsp;|&nbsp; SQLAlchemy &nbsp;|&nbsp; Alembic (migration)
+    </div>
+  </div>`;
+}
+
+function slide_nextsteps() {
+  const steps = [
+    {num:"01", color:C.purple,   title:"Flutter ↔ 리얼 백엔드 연동",
+     items:["Flutter 회원가입/로그인 화면 → 라이브 API 연결","JWT 토큰 저장 및 인증 플로우 완성"]},
+    {num:"02", color:"#1C7293",  title:"AWS DB 연결 완전 안정화",
+     items:["SSH 터널 pgAdmin4 연결 최종 확인","Alembic 테이블 마이그레이션 purby DB 적용"]},
+    {num:"03", color:C.amber,    title:"Flutter UI 리디자인",
+     items:["iOS스타일 미니멀 에스테틱 (#F2F4F7 배경)","AppColors 게터 기반 다이나믹 테마링"]},
+    {num:"04", color:C.green,    title:"APK 빌드 및 팀 데모",
+     items:["flutter build apk --release 배포","Pixel 7 API 34 에뮬레이터 데모 시연"]},
+  ];
+  return `
+  <div class="slide">
+    <div class="grid-2">
+      ${steps.map(s=>`
+        <div class="card-white" style="border-left:4px solid ${s.color}">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:36px;height:36px;border-radius:50%;background:${s.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">${s.num}</div>
+            <span style="font-weight:700;font-size:14px;color:${C.text}">${s.title}</span>
+          </div>
+          ${s.items.map(it=>`
+            <div style="display:flex;gap:6px;margin-bottom:6px">
+              <span style="color:${s.color};font-weight:700">→</span>
+              <span style="font-size:12px;color:${C.mutedL}">${it}</span>
+            </div>`).join("")}
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function slide_qa() {
+  return `
+  <div id="s-qa">
+    <div class="qa-circle">
+      <span style="font-size:64px;font-weight:900;color:#fff">Q&A</span>
+    </div>
+    <p style="font-size:20px;color:${C.purpleL};margin-bottom:32px">궁금하신 점이 있다면 편하게 질문해 주세요.</p>
+    <div style="width:200px;height:3px;background:${C.purple};border-radius:2px;margin-bottom:24px"></div>
+    <p style="color:${C.muted};font-size:14px">Team Persona-frame</p>
+  </div>`;
+}
+
+// ── 네비게이션 ────────────────────────────────────────────────
+let current = 0;
+
+function goTo(idx) {
+  if (idx < 0 || idx >= SLIDES.length) return;
+  current = idx;
+  render();
+}
+
+function render() {
+  const s = SLIDES[current];
+  const body = document.body;
+  const wrapper = document.getElementById("slide-wrapper");
+
+  // 배경 전환
+  body.style.background = s.dark ? C.bg : "#F5F3FF";
+
+  // 헤더 제목
+  const hdr = document.getElementById("slide-header");
+  if (s.header) {
+    hdr.style.display = "flex";
+    document.getElementById("slide-title-text").textContent = s.header;
+    document.getElementById("slide-title-text").style.color = s.dark ? "#fff" : C.text;
+    document.getElementById("slide-label-text").textContent = s.sub;
+  } else {
+    hdr.style.display = "none";
+  }
+
+  // 슬라이드 콘텐츠
+  document.getElementById("slide-body").innerHTML = renderSlide(current);
+
+  // 애니메이션 재트리거
+  wrapper.style.animation = "none";
+  wrapper.offsetHeight;
+  wrapper.style.animation = "fadeSlide 0.35s ease forwards";
+
+  // 내비 탭
+  document.querySelectorAll(".nav-tab").forEach((el, i) => {
+    el.classList.toggle("active", i === current);
+  });
+
+  // 도트
+  document.querySelectorAll(".dot").forEach((el, i) => {
+    el.style.width = i === current ? "20px" : "7px";
+    el.style.background = i === current ? C.purple : "rgba(139,136,170,0.4)";
+  });
+
+  // 버튼 상태
+  document.getElementById("btn-prev").disabled = current === 0;
+  const nextBtn = document.getElementById("btn-next");
+  nextBtn.disabled = current === SLIDES.length - 1;
+  nextBtn.style.background = current === SLIDES.length - 1 ? "none" : C.purple;
+  nextBtn.style.opacity = current === SLIDES.length - 1 ? "0.4" : "1";
+
+  // 진행바
+  document.getElementById("progress-fill").style.width =
+    ((current + 1) / SLIDES.length * 100) + "%";
+}
+
+// ── 초기화 ────────────────────────────────────────────────────
+window.addEventListener("DOMContentLoaded", () => {
+  // 탭 버튼
+  const navTabs = document.getElementById("nav-tabs");
+  SLIDES.forEach((s, i) => {
+    const btn = document.createElement("button");
+    btn.className = "nav-tab";
+    btn.textContent = s.label;
+    btn.onclick = () => goTo(i);
+    navTabs.appendChild(btn);
+  });
+
+  // 도트
+  const dots = document.getElementById("dots");
+  SLIDES.forEach((_, i) => {
+    const d = document.createElement("div");
+    d.className = "dot";
+    d.onclick = () => goTo(i);
+    dots.appendChild(d);
+  });
+
+  document.getElementById("btn-prev").onclick = () => goTo(current - 1);
+  document.getElementById("btn-next").onclick = () => goTo(current + 1);
+
+  window.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " ") goTo(current + 1);
+    if (e.key === "ArrowLeft") goTo(current - 1);
+  });
+
+  render();
+});
+</script>
+</body>
+</html>
