@@ -222,7 +222,13 @@ const SLIDES = [
   { label:"타이틀",    header:"",              sub:"",                   dark:true  },
   { label:"진행 요약", header:"이번 주 진행 요약",     sub:"WEEK 09 SUMMARY",    dark:false },
   { label:"Flutter 앱",header:"Flutter 앱 개발 현황", sub:"MOBILE CLIENT",       dark:false },
-  { label:"빈 슬라이드",header:"",              sub:"",                   dark:false },
+  { label:"이메일 인증", header:"이메일 인증 플로우", sub:"EMAIL AUTH",          dark:false },
+  { label:"JWT 자동 로그인", header:"JWT 자동 로그인", sub:"AUTO LOGIN",         dark:false },
+  { label:"백엔드 API 연동", header:"백엔드 API 연동", sub:"BACKEND SYNC",       dark:false },
+  { label:"성격 커스터마이징", header:"성격 커스터마이징", sub:"AI PERSONALITY",    dark:false },
+  { label:"일정 CRUD", header:"일정 CRUD + 상태 동기화", sub:"SCHEDULE SYNC",    dark:false },
+  { label:"전역 상태 관리", header:"전역 상태 관리 구조", sub:"STATE PATTERN",     dark:false },
+  { label:"데모",       header:"",             sub:"",                   dark:false },
   { label:"FastAPI",   header:"FastAPI 백엔드 현황",  sub:"BACKEND",            dark:true  },
   { label:"AWS 인프라",header:"AWS 인프라 구축",      sub:"INFRASTRUCTURE",     dark:false },
   { label:"DB 설계",   header:"DB 설계 및 구현",      sub:"DATABASE",           dark:true  },
@@ -236,14 +242,364 @@ function renderSlide(idx) {
     case 0: return slide_title();
     case 1: return slide_summary();
     case 2: return slide_flutter();
-    case 3: return `<div style="height:100%"></div>`;
-    case 4: return slide_fastapi();
-    case 5: return slide_aws();
-    case 6: return slide_db();
-    case 7: return slide_nextsteps();
-    case 8: return slide_qa();
+    case 3: return slide_email_auth();
+    case 4: return slide_jwt_autologin();
+    case 5: return slide_backend_api();
+    case 6: return slide_personality();
+    case 7: return slide_schedule_crud();
+    case 8: return slide_global_state();
+    case 9: return `<div style="height:100%;display:flex;align-items:center;justify-content:center;"><iframe src="purby_phone.html" width="340" height="700" style="border:none;background:transparent;" scrolling="no"></iframe></div>`;
+    case 10: return slide_fastapi();
+    case 11: return slide_aws();
+    case 12: return slide_db();
+    case 13: return slide_nextsteps();
+    case 14: return slide_qa();
     default: return "";
   }
+}
+
+function slide_email_auth() {
+  const points = [
+    { icon:"1", text:"단순 가입이 아닌 이메일 인증 3단계 플로우 구현" },
+    { icon:"2", text:"백엔드 FastAPI와 실제 HTTP 통신" },
+    { icon:"3", text:"인증 전엔 가입 버튼 비활성화 (_codeVerified 상태 관리)" },
+  ];
+  const code = `final response = await http.post(
+  Uri.parse(
+    'http://10.0.2.2:8000/auth/send-code',
+  ),
+  body: jsonEncode({'email': email}),
+);`;
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 코드 블록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">signup_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.7;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> <span style="color:#60A5FA;">http</span>.<span style="color:#22C55E;">post</span>(
+  Uri.<span style="color:#22C55E;">parse</span>(
+    <span style="color:#F59E0B;">'http://10.0.2.2:8000/auth/send-code'</span>,
+  ),
+  body: <span style="color:#60A5FA;">jsonEncode</span>({<span style="color:#F59E0B;">'email'</span>: email}),
+);</pre>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_jwt_autologin() {
+  const points = [
+    { icon:"1", text:"앱 시작 시 토큰 유무 자동 확인" },
+    { icon:"2", text:"로그인 상태 유지 — 재로그인 불필요" },
+    { icon:"3", text:"SharedPreferences로 토큰 로컬 저장" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 코드 블록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12.5px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_checkAutoLogin</span>() <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#9B8FFF;">final</span> prefs = <span style="color:#9B8FFF;">await</span> SharedPreferences.<span style="color:#22C55E;">getInstance</span>();
+  <span style="color:#9B8FFF;">final</span> token = prefs.<span style="color:#22C55E;">getString</span>(<span style="color:#F59E0B;">'auth_token'</span>) ?? <span style="color:#F59E0B;">''</span>;
+  <span style="color:#9B8FFF;">if</span> ((prefs.<span style="color:#22C55E;">getBool</span>(<span style="color:#F59E0B;">'logged_in'</span>) ?? <span style="color:#60A5FA;">false</span>)
+      && token.<span style="color:#22C55E;">isNotEmpty</span>) {
+    <span style="color:#22C55E;">setState</span>(() {
+      _token = token;
+      _loggedIn = <span style="color:#60A5FA;">true</span>;
+    });
+  }
+}</pre>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">SHARED PREFERENCES</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_backend_api() {
+  const points = [
+    { icon:"1", text:"설정 변경 즉시 서버 PATCH 요청" },
+    { icon:"2", text:"JWT Bearer Token 인증 헤더 포함" },
+    { icon:"3", text:"로컬 setState + 서버 동기화 동시 처리" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_patchSettings</span>(
+  <span style="color:#9B8FFF;">Map</span>&lt;<span style="color:#9B8FFF;">String</span>, <span style="color:#9B8FFF;">dynamic</span>&gt; updates) <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">patch</span>(
+    Uri.<span style="color:#22C55E;">parse</span>(<span style="color:#F59E0B;">'http://10.0.2.2:8000/settings'</span>),
+    headers: {
+      <span style="color:#F59E0B;">'Authorization'</span>:
+        <span style="color:#F59E0B;">'Bearer \${widget.token}'</span>},
+    body: <span style="color:#60A5FA;">jsonEncode</span>(updates),
+  );
+}
+<span style="color:#8B88AA;">// 토글 하나 바꿀 때마다 즉시 서버 반영</span>
+<span style="color:#22C55E;">onChanged</span>: (v) {
+  <span style="color:#22C55E;">setState</span>(() => sleepEnabled = v);
+  <span style="color:#22C55E;">_patchSettings</span>({<span style="color:#F59E0B;">'sleep_enabled'</span>: v});
+}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI PATCH</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_personality() {
+  const points = [
+    { icon:"1", text:"선택한 성격이 AI 응답 스타일에 반영" },
+    { icon:"2", text:"선택 즉시 PATCH /settings로 서버 저장" },
+    { icon:"3", text:"앱의 핵심 차별점" },
+  ];
+  const personas = [
+    { label:"친근한",  icon:"♥", desc:"따뜻하고 다정하게 대화해요" },
+    { label:"전문적인", icon:"💼", desc:"정확하고 간결하게 답해요" },
+    { label:"유쾌한",  icon:"😄", desc:"유머 있고 활발하게 대화해요" },
+    { label:"차분한",  icon:"🧘", desc:"조용하고 침착하게 말해요" },
+    { label:"엄격한",  icon:"🏋", desc:"집중력 있는 피드백을 줘요" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <!-- 성격 카드 목록 -->
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:8px;">
+          ${personas.map((p, i) => `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:${i===0?'rgba(107,92,231,0.25)':'rgba(255,255,255,0.04)'};border:1px solid ${i===0?'rgba(107,92,231,0.6)':'rgba(255,255,255,0.06)'};">
+            <span style="font-size:18px;width:28px;text-align:center;">${p.icon}</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:${i===0?'#9B8FFF':'#E2E0FF'}">${p.label}</div>
+              <div style="font-size:11px;color:#8B88AA;margin-top:1px">${p.desc}</div>
+            </div>
+            ${i===0?`<div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#6B5CE7;"></div>`:''}
+          </div>`).join("")}
+        </div>
+      </div>
+
+      <!-- 설명 -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">AI PERSONA SYSTEM</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_schedule_crud() {
+  const points = [
+    { icon:"1", text:"홈 화면 일정 카드와 일정 화면이 상태 공유" },
+    { icon:"2", text:"스와이프로 삭제 (Dismissible 위젯)" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">schedule_screen.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 오늘 일정 불러오기</span>
+<span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">get</span>(
+  Uri.<span style="color:#22C55E;">parse</span>(
+    <span style="color:#F59E0B;">'http://10.0.2.2:8000/schedules?date=$dateStr'</span>,
+  ),
+  headers: {
+    <span style="color:#F59E0B;">'Authorization'</span>: <span style="color:#F59E0B;">'Bearer \${widget.token}'</span>
+  },
+);
+
+<span style="color:#8B88AA;">// 완료 처리 — 탭 한 번으로</span>
+<span style="color:#22C55E;">onTap</span>: () <span style="color:#9B8FFF;">async</span> {
+  <span style="color:#22C55E;">setState</span>(() => s[<span style="color:#F59E0B;">'done'</span>] = !s[<span style="color:#F59E0B;">'done'</span>]);
+  <span style="color:#8B88AA;">// 즉시 UI 반영</span>
+  <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">patch</span>(
+    <span style="color:#F59E0B;">'.../schedules/\${s[\'id\']}/done'</span>,
+  );
+}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">STATE MANAGEMENT</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+
+        <!-- 흐름도 -->
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;margin-top:4px;">
+          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">상태 흐름</p>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            ${[
+              {label:"스와이프", color:"#F87171"},
+              {label:"→", color:"#8B88AA"},
+              {label:"DELETE API", color:"#6B5CE7"},
+              {label:"→", color:"#8B88AA"},
+              {label:"setState", color:"#22C55E"},
+              {label:"→", color:"#8B88AA"},
+              {label:"홈 갱신", color:"#F59E0B"},
+            ].map(b => b.label === "→"
+              ? `<span style="color:${b.color};font-size:14px">${b.label}</span>`
+              : `<span style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}55;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">${b.label}</span>`
+            ).join("")}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_global_state() {
+  const points = [
+    { icon:"1", text:"별도 상태 관리 라이브러리 없이 콜백 패턴으로 전역 상태 처리" },
+    { icon:"2", text:"isDark 토글 하나로 앱 전체 테마 실시간 변경" },
+    { icon:"3", text:"aiName 변경 시 홈 화면 인사말 즉시 반영" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;justify-content:center;">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;">
+
+      <div style="background:#1E1538;border-radius:12px;overflow:hidden;border:1px solid rgba(107,92,231,0.35);">
+        <div style="background:#251B4B;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(107,92,231,0.2);">
+          <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
+          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main.dart</span>
+        </div>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:11.5px;line-height:1.8;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 최상위에서 상태 관리</span>
+<span style="color:#8B88AA;">// → 하위 위젯에 콜백으로 전달</span>
+<span style="color:#9B8FFF;">MaterialApp</span>(
+  home: _loggedIn
+    ? <span style="color:#9B8FFF;">MainScreen</span>(
+        isDark:       _isDark,
+        aiName:       _aiName,
+        token:        _token,
+        <span style="color:#22C55E;">onDarkToggle</span>: _setDark,
+        <span style="color:#8B88AA;">// 설정 → 앱 전체 테마 변경</span>
+        <span style="color:#22C55E;">onNameChange</span>: (n) => ...,
+        <span style="color:#8B88AA;">// 설정 → 홈 인사말 변경</span>
+        <span style="color:#22C55E;">onLogout</span>:     _logout,
+      )
+    : <span style="color:#9B8FFF;">AuthScreen</span>(<span style="color:#22C55E;">onLogin</span>: _login),
+)</pre>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="margin-bottom:4px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">CALLBACK PATTERN</span>
+        </div>
+        ${points.map(p => `
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+        </div>`).join("")}
+
+        <!-- 구조 흐름도 -->
+        <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;">
+          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">위젯 트리</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${[
+              { label:"main.dart (최상위 상태)", color:"#6B5CE7", indent:0 },
+              { label:"MainScreen (token, aiName, isDark)", color:"#9B8FFF", indent:1 },
+              { label:"HomeTab  ←  aiName", color:"#22C55E", indent:2 },
+              { label:"SettingsTab  →  onDarkToggle", color:"#F59E0B", indent:2 },
+            ].map(n => `
+            <div style="display:flex;align-items:center;gap:8px;padding-left:${n.indent*20}px;">
+              <div style="width:8px;height:8px;border-radius:2px;background:${n.color};flex-shrink:0;"></div>
+              <span style="font-size:11px;color:#1E1240;font-family:Consolas,'Courier New',monospace;">${n.label}</span>
+            </div>`).join("")}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function slide_blank(num) {
+  return `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+    <div style="width:60px;height:60px;border-radius:50%;border:2px dashed rgba(107,92,231,0.4);display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:22px;font-weight:700;color:rgba(107,92,231,0.5)">${num}</span>
+    </div>
+    <p style="font-size:13px;color:rgba(107,92,231,0.4);letter-spacing:1px;">슬라이드를 채워주세요</p>
+  </div>`;
 }
 
 function slide_title() {
