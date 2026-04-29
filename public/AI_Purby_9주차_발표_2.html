@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -29,14 +31,14 @@
   #logo {
     width: 28px; height: 28px; border-radius: 6px; background: #6B5CE7;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; color: #fff;
+    font-size: 15px; font-weight: 700; color: #fff;
   }
-  #header-title { color: #fff; font-weight: 600; font-size: 14px; }
-  #header-sub { color: #8B88AA; font-size: 12px; }
-  #nav-tabs { display: flex; align-items: center; gap: 4px; }
+  #header-title { color: #fff; font-weight: 600; font-size: 18px; }
+  #header-sub { color: #8B88AA; font-size: 15px; }
+  #nav-tabs { display: none; }
   .nav-tab {
     background: none; border: none; border-bottom: 2px solid transparent;
-    color: #8B88AA; font-size: 11px; padding: 4px 8px;
+    color: #8B88AA; font-size: 14px; padding: 4px 8px;
     transition: all 0.2s; font-family: inherit;
   }
   .nav-tab.active { color: #6B5CE7; border-bottom-color: #6B5CE7; font-weight: 700; }
@@ -50,18 +52,14 @@
     justify-content: space-between; align-items: center;
     flex-shrink: 0;
   }
-  #slide-header h2 { font-size: 22px; font-weight: 700; }
-  #slide-header span { font-size: 11px; color: #8B88AA; letter-spacing: 1px; }
+  #slide-header h2 { font-size: 26px; font-weight: 700; }
+  #slide-header span { font-size: 14px; color: #8B88AA; letter-spacing: 1px; }
   #slide-body { flex: 1; overflow: hidden; }
 
-  #footer {
-    height: 48px; background: #1A1236; display: flex; align-items: center;
-    justify-content: center; gap: 20px; flex-shrink: 0;
-    border-top: 1px solid rgba(107,92,231,0.2);
-  }
+  #footer { display: none; }
   .nav-btn {
     background: none; border: 1px solid rgba(107,92,231,0.4); border-radius: 6px;
-    color: #9B8FFF; padding: 4px 14px; font-size: 13px; transition: all 0.2s;
+    color: #9B8FFF; padding: 4px 14px; font-size: 17px; transition: all 0.2s;
   }
   .nav-btn.next { background: #6B5CE7; border-color: #6B5CE7; color: #fff; }
   .nav-btn:disabled { opacity: 0.4; background: none; }
@@ -71,7 +69,7 @@
     background: rgba(139,136,170,0.4); transition: all 0.3s ease;
   }
   .dot.active { background: #6B5CE7; }
-  #progress-bar { height: 3px; background: #251B4B; flex-shrink: 0; }
+  #progress-bar { display: none; }
   #progress-fill { height: 100%; background: #6B5CE7; transition: width 0.4s ease; }
 
   @keyframes fadeSlide {
@@ -91,10 +89,10 @@
   }
   .card-left-border { border-left: 4px solid #6B5CE7; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .label-sm { font-size: 13px; color: #6B6884; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
+  .label-sm { font-size: 17px; color: #6B6884; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
   .badge {
     display: inline-block; padding: 2px 10px; border-radius: 6px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
   }
   .badge-done { background: rgba(34,197,94,0.15); color: #22C55E; border: 1px solid rgba(34,197,94,0.35); }
   .badge-wip  { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.35); }
@@ -105,19 +103,19 @@
   #s-title-left { flex: 1; }
   .week-badge {
     display: inline-block; padding: 4px 14px; border-radius: 8px;
-    background: #6B5CE7; color: #fff; font-size: 12px; font-weight: 700;
+    background: #6B5CE7; color: #fff; font-size: 15px; font-weight: 700;
     letter-spacing: 2px; margin-bottom: 24px;
   }
-  #s-title h1 { font-size: clamp(48px,7vw,80px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 12px; }
-  #s-title p.sub { font-size: clamp(16px,2.2vw,22px); color: #9B8FFF; margin-bottom: 32px; }
+  #s-title h1 { font-size: clamp(56px,7vw,90px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 12px; }
+  #s-title p.sub { font-size: clamp(20px,2.5vw,26px); color: #9B8FFF; margin-bottom: 32px; }
   #title-divider { width: 120px; height: 3px; background: #6B5CE7; border-radius: 2px; margin-bottom: 28px; }
-  #title-team { color: #8B88AA; font-size: 14px; letter-spacing: 0.5px; }
+  #title-team { color: #8B88AA; font-size: 18px; letter-spacing: 0.5px; }
   #title-cards { width: 260px; display: flex; flex-direction: column; gap: 12px; }
   .title-card {
     background: #251B4B; border-radius: 10px; padding: 14px 18px;
   }
-  .title-card .tc-label { font-size: 11px; color: #8B88AA; margin-bottom: 4px; }
-  .title-card .tc-val { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .title-card .tc-label { font-size: 14px; color: #8B88AA; margin-bottom: 4px; }
+  .title-card .tc-val { font-size: 30px; font-weight: 800; margin-bottom: 8px; }
   .progress-track { height: 5px; background: #2D2456; border-radius: 3px; }
   .progress-fill-anim { height: 100%; border-radius: 3px; transition: width 1.2s ease; }
 
@@ -129,7 +127,7 @@
   .tab-num {
     width: 28px; height: 28px; border-radius: 50%; background: #6B5CE7; color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    font-size: 17px; font-weight: 700; flex-shrink: 0;
   }
   .feat-row {
     background: #F5F3FF; border-radius: 8px; padding: 12px 14px;
@@ -143,31 +141,19 @@
   }
   .method-badge {
     min-width: 54px; padding: 2px 0; border-radius: 4px;
-    font-size: 10px; font-weight: 700; text-align: center;
+    font-size: 13px; font-weight: 700; text-align: center;
   }
   .dir-row {
     display: flex; align-items: center; gap: 12px; padding: 7px 0;
     border-bottom: 1px solid rgba(107,92,231,0.15);
   }
 
-  /* S5: AWS */
+  /* S5: FastAPI */
   .arch-boxes { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
   .arch-box { border-radius: 10px; padding: 16px 22px; color: #fff; text-align: center; min-width: 160px; }
   .arch-arrow { display: flex; flex-direction: column; align-items: center; padding: 0 8px; }
   .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .check-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-
-  /* S6: DB */
-  .db-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .db-table { background: #251B4B; border-radius: 10px; overflow: hidden; }
-  .db-thead { padding: 8px 14px; }
-  .db-row { display: flex; justify-content: space-between; padding: 6px 14px; font-size: 12px; }
-  .db-row.alt { background: #1E1538; }
-  .db-footer {
-    background: #251B4B; border-radius: 8px; padding: 10px 16px;
-    border: 1px solid rgba(107,92,231,0.3); font-size: 12px; color: #8B88AA;
-    text-align: center; margin-top: 12px;
-  }
+  .check-item { display: flex; align-items: center; gap: 8px; font-size: 15px; }
 
   /* S8: Q&A */
   #s-qa { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -230,9 +216,9 @@ const SLIDES = [
   { label:"전역 상태 관리", header:"전역 상태 관리 구조", sub:"STATE PATTERN",     dark:false },
   { label:"데모",       header:"",             sub:"",                   dark:false },
   { label:"FastAPI",   header:"FastAPI 백엔드 현황",  sub:"BACKEND",            dark:true  },
-  { label:"AWS 인프라",header:"AWS 인프라 구축",      sub:"INFRASTRUCTURE",     dark:false },
-  { label:"DB 설계",   header:"DB 설계 및 구현",      sub:"DATABASE",           dark:true  },
+
   { label:"향후 계획", header:"향후 계획",            sub:"NEXT STEPS",         dark:false },
+  { label:"G-Valley",  header:"G-Valley \uC18C\uAC1C",    sub:"ABOUT G-VALLEY",     dark:false },
   { label:"Q&A",       header:"",              sub:"",                   dark:true  },
 ];
 
@@ -250,10 +236,9 @@ function renderSlide(idx) {
     case 8: return slide_global_state();
     case 9: return `<div style="height:100%;display:flex;align-items:center;justify-content:center;"><iframe src="purby_phone.html" width="340" height="700" style="border:none;background:transparent;" scrolling="no"></iframe></div>`;
     case 10: return slide_fastapi();
-    case 11: return slide_aws();
-    case 12: return slide_db();
-    case 13: return slide_nextsteps();
-    case 14: return slide_qa();
+    case 11: return slide_nextsteps();
+    case 12: return slide_gvalley();
+    case 13: return slide_qa();
     default: return "";
   }
 }
@@ -280,9 +265,9 @@ function slide_email_auth() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">signup_screen.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">signup_screen.dart</span>
         </div>
-        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.7;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> <span style="color:#60A5FA;">http</span>.<span style="color:#22C55E;">post</span>(
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:17px;line-height:1.7;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> <span style="color:#60A5FA;">http</span>.<span style="color:#22C55E;">post</span>(
   Uri.<span style="color:#22C55E;">parse</span>(
     <span style="color:#F59E0B;">'http://10.0.2.2:8000/auth/send-code'</span>,
   ),
@@ -293,12 +278,12 @@ function slide_email_auth() {
       <!-- 설명 -->
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
       </div>
 
@@ -322,9 +307,9 @@ function slide_jwt_autologin() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main_screen.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">main_screen.dart</span>
         </div>
-        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12.5px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_checkAutoLogin</span>() <span style="color:#9B8FFF;">async</span> {
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:16px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_checkAutoLogin</span>() <span style="color:#9B8FFF;">async</span> {
   <span style="color:#9B8FFF;">final</span> prefs = <span style="color:#9B8FFF;">await</span> SharedPreferences.<span style="color:#22C55E;">getInstance</span>();
   <span style="color:#9B8FFF;">final</span> token = prefs.<span style="color:#22C55E;">getString</span>(<span style="color:#F59E0B;">'auth_token'</span>) ?? <span style="color:#F59E0B;">''</span>;
   <span style="color:#9B8FFF;">if</span> ((prefs.<span style="color:#22C55E;">getBool</span>(<span style="color:#F59E0B;">'logged_in'</span>) ?? <span style="color:#60A5FA;">false</span>)
@@ -340,12 +325,12 @@ function slide_jwt_autologin() {
       <!-- 설명 -->
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">SHARED PREFERENCES</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">SHARED PREFERENCES</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
       </div>
 
@@ -368,9 +353,9 @@ function slide_backend_api() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">settings_screen.dart</span>
         </div>
-        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_patchSettings</span>(
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:15px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#9B8FFF;">Future</span>&lt;<span style="color:#9B8FFF;">void</span>&gt; <span style="color:#22C55E;">_patchSettings</span>(
   <span style="color:#9B8FFF;">Map</span>&lt;<span style="color:#9B8FFF;">String</span>, <span style="color:#9B8FFF;">dynamic</span>&gt; updates) <span style="color:#9B8FFF;">async</span> {
   <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">patch</span>(
     Uri.<span style="color:#22C55E;">parse</span>(<span style="color:#F59E0B;">'http://10.0.2.2:8000/settings'</span>),
@@ -389,12 +374,12 @@ function slide_backend_api() {
 
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI PATCH</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">FLUTTER → FASTAPI PATCH</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
       </div>
 
@@ -425,15 +410,15 @@ function slide_personality() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">settings_screen.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">settings_screen.dart</span>
         </div>
         <div style="padding:16px 18px;display:flex;flex-direction:column;gap:8px;">
           ${personas.map((p, i) => `
           <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:${i===0?'rgba(107,92,231,0.25)':'rgba(255,255,255,0.04)'};border:1px solid ${i===0?'rgba(107,92,231,0.6)':'rgba(255,255,255,0.06)'};">
-            <span style="font-size:18px;width:28px;text-align:center;">${p.icon}</span>
+            <span style="font-size:22px;width:28px;text-align:center;">${p.icon}</span>
             <div>
-              <div style="font-size:13px;font-weight:700;color:${i===0?'#9B8FFF':'#E2E0FF'}">${p.label}</div>
-              <div style="font-size:11px;color:#8B88AA;margin-top:1px">${p.desc}</div>
+              <div style="font-size:17px;font-weight:700;color:${i===0?'#9B8FFF':'#E2E0FF'}">${p.label}</div>
+              <div style="font-size:14px;color:#8B88AA;margin-top:1px">${p.desc}</div>
             </div>
             ${i===0?`<div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#6B5CE7;"></div>`:''}
           </div>`).join("")}
@@ -443,12 +428,12 @@ function slide_personality() {
       <!-- 설명 -->
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">AI PERSONA SYSTEM</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">AI PERSONA SYSTEM</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
       </div>
 
@@ -470,9 +455,9 @@ function slide_schedule_crud() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">schedule_screen.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">schedule_screen.dart</span>
         </div>
-        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 오늘 일정 불러오기</span>
+        <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:15px;line-height:1.75;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 오늘 일정 불러오기</span>
 <span style="color:#9B8FFF;">final</span> response = <span style="color:#9B8FFF;">await</span> http.<span style="color:#22C55E;">get</span>(
   Uri.<span style="color:#22C55E;">parse</span>(
     <span style="color:#F59E0B;">'http://10.0.2.2:8000/schedules?date=$dateStr'</span>,
@@ -494,17 +479,17 @@ function slide_schedule_crud() {
 
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">STATE MANAGEMENT</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">STATE MANAGEMENT</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
 
         <!-- 흐름도 -->
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;margin-top:4px;">
-          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">상태 흐름</p>
+          <p style="font-size:14px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">상태 흐름</p>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             ${[
               {label:"스와이프", color:"#F87171"},
@@ -515,8 +500,8 @@ function slide_schedule_crud() {
               {label:"→", color:"#8B88AA"},
               {label:"홈 갱신", color:"#F59E0B"},
             ].map(b => b.label === "→"
-              ? `<span style="color:${b.color};font-size:14px">${b.label}</span>`
-              : `<span style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}55;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">${b.label}</span>`
+              ? `<span style="color:${b.color};font-size:18px">${b.label}</span>`
+              : `<span style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}55;border-radius:6px;padding:3px 10px;font-size:14px;font-weight:700">${b.label}</span>`
             ).join("")}
           </div>
         </div>
@@ -541,7 +526,7 @@ function slide_global_state() {
           <div style="width:10px;height:10px;border-radius:50%;background:#F87171;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
           <div style="width:10px;height:10px;border-radius:50%;background:#22C55E;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#8B88AA;">main.dart</span>
+          <span style="margin-left:8px;font-size:14px;color:#8B88AA;">main.dart</span>
         </div>
         <pre style="margin:0;padding:20px 22px;font-family:Consolas,'Courier New',monospace;font-size:11.5px;line-height:1.8;color:#E2E0FF;white-space:pre;overflow-x:auto;"><span style="color:#8B88AA;">// 최상위에서 상태 관리</span>
 <span style="color:#8B88AA;">// → 하위 위젯에 콜백으로 전달</span>
@@ -563,17 +548,17 @@ function slide_global_state() {
 
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="margin-bottom:4px;">
-          <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:#8B88AA;">CALLBACK PATTERN</span>
+          <span style="font-size:14px;font-weight:700;letter-spacing:2px;color:#8B88AA;">CALLBACK PATTERN</span>
         </div>
         ${points.map(p => `
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
-          <span style="font-size:13px;color:#1E1240;line-height:1.6;">${p.text}</span>
+          <div style="width:26px;height:26px;border-radius:50%;background:#6B5CE7;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.icon}</div>
+          <span style="font-size:17px;color:#1E1240;line-height:1.6;">${p.text}</span>
         </div>`).join("")}
 
         <!-- 구조 흐름도 -->
         <div style="background:#fff;border-radius:10px;padding:16px 18px;border:1px solid #E8E3FF;">
-          <p style="font-size:11px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">위젯 트리</p>
+          <p style="font-size:14px;font-weight:700;color:#8B88AA;letter-spacing:1px;margin-bottom:12px;">위젯 트리</p>
           <div style="display:flex;flex-direction:column;gap:6px;">
             ${[
               { label:"main.dart (최상위 상태)", color:"#6B5CE7", indent:0 },
@@ -583,7 +568,7 @@ function slide_global_state() {
             ].map(n => `
             <div style="display:flex;align-items:center;gap:8px;padding-left:${n.indent*20}px;">
               <div style="width:8px;height:8px;border-radius:2px;background:${n.color};flex-shrink:0;"></div>
-              <span style="font-size:11px;color:#1E1240;font-family:Consolas,'Courier New',monospace;">${n.label}</span>
+              <span style="font-size:14px;color:#1E1240;font-family:Consolas,'Courier New',monospace;">${n.label}</span>
             </div>`).join("")}
           </div>
         </div>
@@ -596,18 +581,16 @@ function slide_global_state() {
 function slide_blank(num) {
   return `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
     <div style="width:60px;height:60px;border-radius:50%;border:2px dashed rgba(107,92,231,0.4);display:flex;align-items:center;justify-content:center;">
-      <span style="font-size:22px;font-weight:700;color:rgba(107,92,231,0.5)">${num}</span>
+      <span style="font-size:26px;font-weight:700;color:rgba(107,92,231,0.5)">${num}</span>
     </div>
-    <p style="font-size:13px;color:rgba(107,92,231,0.4);letter-spacing:1px;">슬라이드를 채워주세요</p>
+    <p style="font-size:17px;color:rgba(107,92,231,0.4);letter-spacing:1px;">슬라이드를 채워주세요</p>
   </div>`;
 }
 
 function slide_title() {
   const cards = [
     {label:"Flutter 앱", val:90, color:C.purple},
-    {label:"FastAPI 백엔드", val:85, color:C.purpleL},
-    {label:"AWS 인프라", val:70, color:C.amber},
-    {label:"DB 구현", val:80, color:C.green},
+    {label:"FastAPI 백엔드", val:30, color:C.purpleL},
   ];
   return `
   <div id="s-title">
@@ -637,10 +620,6 @@ function slide_summary() {
       items:["스케줄 CRUD (swipe 삭제, 탭으로 완료 처리)","다크/라이트 모드 토글"] },
     { icon:"⚡", title:"FastAPI 백엔드", status:"완료",
       items:["다중 파일 아키텍처 리팩토링","JWT 인증 + 이메일 확인 API","Settings GET/PATCH 엔드포인트 구현"] },
-    { icon:"☁", title:"AWS 인프라", status:"진행중",
-      items:["EC2 인스턴스 (purby-server) 세팅","PostgreSQL DB 클라우드 마이그레이션","AWS CLI v2 + SSM 플러그인 설치"] },
-    { icon:"🗄", title:"DB 설계 및 구현", status:"완료",
-      items:["purby DB 스키마 설계 완료","psycopg2-binary 연동 (Python 3.13 호환)","Alembic 마이그레이션 준비"] },
   ];
   return `
   <div class="slide">
@@ -649,15 +628,15 @@ function slide_summary() {
         <div class="card-white card-left-border">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:34px;height:34px;border-radius:50%;background:${C.purple};display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff">${it.icon}</div>
-              <span style="font-weight:700;font-size:15px;color:${C.text}">${it.title}</span>
+              <div style="width:34px;height:34px;border-radius:50%;background:${C.purple};display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">${it.icon}</div>
+              <span style="font-weight:700;font-size:19px;color:${C.text}">${it.title}</span>
             </div>
             <span class="badge ${it.status==="완료"?"badge-done":"badge-wip"}">${it.status}</span>
           </div>
           ${it.items.map(t=>`
             <div style="display:flex;gap:6px;margin-bottom:5px">
-              <span style="color:${C.purple};font-weight:700;font-size:13px">•</span>
-              <span style="font-size:12px;color:${C.mutedL}">${t}</span>
+              <span style="color:${C.purple};font-weight:700;font-size:17px">•</span>
+              <span style="font-size:15px;color:${C.mutedL}">${t}</span>
             </div>`).join("")}
         </div>`).join("")}
     </div>
@@ -685,18 +664,18 @@ function slide_flutter() {
           <div class="tab-row">
             <div class="tab-num">${i+1}</div>
             <div style="flex:1">
-              <div style="font-weight:700;font-size:13px;color:${C.text}">${t.name}</div>
-              <div style="font-size:11px;color:${C.mutedL}">${t.desc}</div>
+              <div style="font-weight:700;font-size:17px;color:${C.text}">${t.name}</div>
+              <div style="font-size:14px;color:${C.mutedL}">${t.desc}</div>
             </div>
-            <span style="color:${C.purple};font-size:16px">✓</span>
+            <span style="color:${C.purple};font-size:20px">✓</span>
           </div>`).join("")}
       </div>
       <div class="card-white">
         <p class="label-sm">구현 핵심 기능</p>
         ${feats.map(f=>`
           <div class="feat-row">
-            <div style="font-weight:700;font-size:14px;color:${C.text};margin-bottom:4px">${f.title}</div>
-            <div style="font-size:11px;color:${C.mutedL}">${f.detail}</div>
+            <div style="font-weight:700;font-size:18px;color:${C.text};margin-bottom:4px">${f.title}</div>
+            <div style="font-size:14px;color:${C.mutedL}">${f.detail}</div>
           </div>`).join("")}
       </div>
     </div>
@@ -732,8 +711,8 @@ function slide_fastapi() {
         <p class="label-sm" style="color:${C.purpleL}">프로젝트 아키텍처</p>
         ${dirs.map(d=>`
           <div class="dir-row">
-            <code style="color:${d.color};font-weight:700;font-size:13px;min-width:90px">${d.name}</code>
-            <span style="font-size:11px;color:${C.muted}">${d.desc}</span>
+            <code style="color:${d.color};font-weight:700;font-size:17px;min-width:90px">${d.name}</code>
+            <span style="font-size:14px;color:${C.muted}">${d.desc}</span>
           </div>`).join("")}
       </div>
       <div class="card-dark">
@@ -741,99 +720,23 @@ function slide_fastapi() {
         ${eps.map(ep=>`
           <div class="ep-row">
             <span class="method-badge" style="background:${mc[ep.m]}33;color:${mc[ep.m]}">${ep.m}</span>
-            <code style="color:${C.purpleL};font-size:11px;flex:1">${ep.p}</code>
-            <span style="font-size:10px;color:${C.muted}">${ep.d}</span>
+            <code style="color:${C.purpleL};font-size:14px;flex:1">${ep.p}</code>
+            <span style="font-size:13px;color:${C.muted}">${ep.d}</span>
           </div>`).join("")}
       </div>
     </div>
   </div>`;
 }
 
-function slide_aws() {
-  const boxes = [
-    {label:"Flutter 앱",  sub:"Windows / Android Studio", color:C.purple},
-    {label:"FastAPI",     sub:"EC2 (purby-server)\nap-northeast-2", color:"#1C7293"},
-    {label:"PostgreSQL",  sub:"EC2 내부\npurby DB", color:C.green},
-  ];
-  const tasks = [
-    {t:"EC2 인스턴스 (purby-server) 생성 완료", done:true},
-    {t:"AWS CLI v2 설치 완료", done:true},
-    {t:"SSM Session Manager Plugin 설치 완료", done:true},
-    {t:"로컬 persona_frame → AWS purby DB 마이그레이션", done:true},
-    {t:"aws configure (Access Key 수령 후 완료)", done:true},
-    {t:"SSH 터널 pgAdmin4 연결 확인", done:false},
-    {t:"Alembic 테이블 마이그레이션 AWS DB 적용", done:false},
-  ];
-  return `
-  <div class="slide" style="gap:20px">
-    <div class="arch-boxes">
-      ${boxes.map((b,i)=>`
-        <div style="display:flex;align-items:center">
-          <div class="arch-box" style="background:${b.color}">
-            <div style="font-weight:700;font-size:15px">${b.label}</div>
-            <div style="font-size:10px;opacity:0.8;margin-top:4px;white-space:pre-line">${b.sub}</div>
-          </div>
-          ${i<2?`<div class="arch-arrow">
-            <span style="font-size:10px;color:${C.muted};margin-bottom:2px">REST API</span>
-            <span style="color:${C.muted};font-size:18px">→</span>
-          </div>`:""}
-        </div>`).join("")}
-    </div>
-    <div class="card-white">
-      <p class="label-sm">구축 현황</p>
-      <div class="checklist">
-        ${tasks.map(t=>`
-          <div class="check-item" style="color:${t.done?C.text:C.amber}">
-            <span>${t.done?"✅":"⚠️"}</span>
-            <span>${t.t}</span>
-          </div>`).join("")}
-      </div>
-    </div>
-  </div>`;
-}
-
-function slide_db() {
-  const tables = [
-    {name:"users",      color:C.purple,
-     cols:[{n:"id",t:"UUID / PK"},{n:"email",t:"VARCHAR UNIQUE"},{n:"password",t:"VARCHAR (bcrypt)"},{n:"created_at",t:"TIMESTAMP"}]},
-    {name:"schedules",  color:C.green,
-     cols:[{n:"user_id",t:"UUID / FK→users"},{n:"title",t:"VARCHAR"},{n:"date",t:"DATE"},{n:"is_completed",t:"BOOLEAN"},{n:"created_at",t:"TIMESTAMP"}]},
-    {name:"settings",   color:C.amber,
-     cols:[{n:"user_id",t:"UUID / FK→users"},{n:"ai_name",t:"VARCHAR"},{n:"personality",t:"VARCHAR"},{n:"volume / brightness",t:"INTEGER"}]},
-    {name:"email_codes",color:C.blue,
-     cols:[{n:"email",t:"VARCHAR"},{n:"code",t:"VARCHAR(6)"},{n:"expires_at",t:"TIMESTAMP"},{n:"is_used",t:"BOOLEAN"}]},
-  ];
-  return `
-  <div class="slide">
-    <div class="db-grid">
-      ${tables.map(tbl=>`
-        <div class="db-table" style="border:1px solid ${tbl.color}44">
-          <div class="db-thead" style="background:${tbl.color}22;border-bottom:1px solid ${tbl.color}44">
-            <code style="color:${tbl.color};font-weight:700;font-size:14px">${tbl.name}</code>
-          </div>
-          ${tbl.cols.map((c,i)=>`
-            <div class="db-row${i%2===0?" alt":""}">
-              <code style="color:#fff">${c.n}</code>
-              <span style="color:${C.muted}">${c.t}</span>
-            </div>`).join("")}
-        </div>`).join("")}
-    </div>
-    <div class="db-footer">
-      기술스택: PostgreSQL 18 (AWS EC2) &nbsp;|&nbsp; psycopg2-binary &nbsp;|&nbsp; SQLAlchemy &nbsp;|&nbsp; Alembic (migration)
-    </div>
-  </div>`;
-}
 
 function slide_nextsteps() {
   const steps = [
-    {num:"01", color:C.purple,   title:"Flutter ↔ 리얼 백엔드 연동",
-     items:["Flutter 회원가입/로그인 화면 → 라이브 API 연결","JWT 토큰 저장 및 인증 플로우 완성"]},
-    {num:"02", color:"#1C7293",  title:"AWS DB 연결 완전 안정화",
-     items:["SSH 터널 pgAdmin4 연결 최종 확인","Alembic 테이블 마이그레이션 purby DB 적용"]},
-    {num:"03", color:C.amber,    title:"Flutter UI 리디자인",
-     items:["iOS스타일 미니멀 에스테틱 (#F2F4F7 배경)","AppColors 게터 기반 다이나믹 테마링"]},
-    {num:"04", color:C.green,    title:"APK 빌드 및 팀 데모",
-     items:["flutter build apk --release 배포","Pixel 7 API 34 에뮬레이터 데모 시연"]},
+    {num:"01", color:C.purple,   title:"Flutter \u2194 \ub9ac\uc5bc \ubc31\uc5d4\ub4dc \uc5f0\ub3d9",
+     items:["Flutter \ud68c\uc6d0\uac00\uc785/\ub85c\uADF8\uc778 \ud654\uba74 \u2192 \ub77c\uc774\ube0c API \uc5f0\uacb0","JWT \ud1a0\ud070 \uc800\uc7a5 \uc608 \uc778\uc99d \ud50c\ub85c\uc6b0 \uc644\uc131"]},
+    {num:"02", color:C.amber,    title:"Flutter UI \ub9ac\ub514\uc790\uc778",
+     items:["iOS\uc2a4\ud0c0\uc77c \ubbf8\ub2c8\uba40 \uc5d0\uc2a4\ud14c\ud2f1 (#F2F4F7 \ubc30\uacbd)","AppColors \uac8c\ud130 \uae30\ubc18 \ub2e4\uc774\ub098\ubbf9 \ud14c\ub9c8\ub9c1"]},
+    {num:"03", color:C.green,    title:"APK \ube4c\ub4dc \ubc0f \ud300 \ub370\ubaa8",
+     items:["flutter build apk --release \ubc30\ud3ec","Pixel 7 API 34 \uc5d0\ubba4\ub808\uc774\ud130 \ub370\ubaa8 \uc2dc\uc5f0"]},
   ];
   return `
   <div class="slide">
@@ -841,15 +744,86 @@ function slide_nextsteps() {
       ${steps.map(s=>`
         <div class="card-white" style="border-left:4px solid ${s.color}">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-            <div style="width:36px;height:36px;border-radius:50%;background:${s.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">${s.num}</div>
-            <span style="font-weight:700;font-size:14px;color:${C.text}">${s.title}</span>
+            <div style="width:36px;height:36px;border-radius:50%;background:${s.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex-shrink:0">${s.num}</div>
+            <span style="font-weight:700;font-size:18px;color:${C.text}">${s.title}</span>
           </div>
           ${s.items.map(it=>`
             <div style="display:flex;gap:6px;margin-bottom:6px">
               <span style="color:${s.color};font-weight:700">→</span>
-              <span style="font-size:12px;color:${C.mutedL}">${it}</span>
+              <span style="font-size:15px;color:${C.mutedL}">${it}</span>
             </div>`).join("")}
         </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function slide_gvalley() {
+  const stats = [
+    { num:"13,000+", label:"\uC785\uC8FC \uAE30\uC5C5", color:C.purple },
+    { num:"246,000+", label:"\uC885\uC0AC\uC790 \uC218", color:C.purpleL },
+    { num:"8,000+", label:"IT \uAE30\uC5C5", color:C.green },
+    { num:"3\uAC1C \uD638\uC120", label:"\uC9C0\uD558\uCCA0 \uC811\uADFC", color:C.amber },
+  ];
+  const points = [
+    { icon:"\uD83C\uDFED", title:"1964\uB144 \uAD6C\uB85C \uACF5\uB2E8\uC73C\uB85C \uCD9C\uBC1C", desc:"\uB300\uD55C\uBBFC\uAD6D \uCD5C\uCD08\uC758 \uAD6D\uAC00\uC0B0\uC5C5\uB2E8\uC9C0 \uC870\uC131, \uC12C\uC720\u00B7\uBD09\uC81C \uC0B0\uC5C5\uC758 \uBA54\uCE74" },
+    { icon:"\uD83D\uDCBB", title:"2000\uB144\uB300 IT \uD5C8\uBE0C\uB85C \uBCC0\uBAA8", desc:"\uCCA8\uB2E8 \uC9C0\uC2DD\uC815\uBCF4 \uC0B0\uC5C5 \uC911\uC2EC\uC73C\uB85C \uC5C5\uC885 \uC804\uD658, G-Valley\uB85C \uC7AC\uD0C4\uC0DD" },
+    { icon:"\uD83D\uDE87", title:"\uC6B0\uC218\uD55C \uAD50\uD1B5 \uC811\uADFC\uC131", desc:"2\u00B71\u00B77\uD638\uC120 3\uAC1C \uC9C0\uD558\uCCA0 \uB178\uC120 \uD65C\uC6A9, \uC0C1\uC555\uAD50\uD1B5\uAD8C \uC218\uD601 \uD3EC\uC9C0" },
+    { icon:"\uD83C\uDF10", title:"\uAE00\uB85C\uBC8C IT \uD074\uB7EC\uC2A4\uD130", desc:"\uB137\uB9C8\uBE14 \uB4F1 \uAD6D\uB0B4 \uAC70\uB300 IT \uAE30\uC5C5 \uBCF8\uC0AC \uC785\uC8FC, \uC2DC\uB108\uC9C0\uC758 \uC6D0\uCC9C" },
+  ];
+  return `
+  <div class="slide" style="gap:20px;">
+    <!-- 상단 타이틀 -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:4px;">
+      <div style="padding:6px 18px;border-radius:8px;background:#6B5CE7;color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;">G-VALLEY</div>
+      <span style="color:#8B88AA;font-size:14px;">\uC11C\uC6B8\uB514\uC9C0\uD138\uC0B0\uC5C5\uB2E8\uC9C0 &nbsp;\uB300\uD55C\uBBFC\uAD6D \uB300\uD45C IT \uD5C8\uBE0C</span>
+    </div>
+
+    <!-- 통계 카드 4개 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      ${stats.map(s=>`
+        <div style="background:#251B4B;border-radius:12px;padding:18px 16px;text-align:center;border:1px solid ${s.color}44;">
+          <div style="font-size:26px;font-weight:900;color:${s.color};margin-bottom:6px;">${s.num}</div>
+          <div style="font-size:13px;color:#8B88AA;">${s.label}</div>
+        </div>`).join("")}
+    </div>
+
+    <!-- 중단 포인트 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${points.map(p=>`
+        <div style="background:#fff;border-radius:12px;padding:16px 18px;border:1px solid #E8E3FF;border-left:4px solid #6B5CE7;display:flex;gap:14px;align-items:flex-start;">
+          <span style="font-size:22px;">${p.icon}</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1E1240;margin-bottom:4px;">${p.title}</div>
+            <div style="font-size:13px;color:#6B6884;line-height:1.5;">${p.desc}</div>
+          </div>
+        </div>`).join("")}
+    </div>
+
+    <!-- 입사 방법 -->
+    <div style="background:#251B4B;border-radius:12px;padding:18px 20px;border:1px solid rgba(107,92,231,0.3);">
+      <div style="font-size:13px;font-weight:700;letter-spacing:2px;color:#9B8FFF;margin-bottom:14px;">\uC785\uC0AC \uBC29\uBC95</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="background:#1A1236;border-radius:10px;padding:14px 16px;border:1px solid rgba(107,92,231,0.25);">
+          <div style="font-size:19px;margin-bottom:6px;">\uD83D\uDCBB</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">\uCC44\uC6A9 \uD50C\uB7AB\uD3FC</div>
+          <div style="font-size:12px;color:#8B88AA;line-height:1.6;">\uC78A\uCF54\uB9AC\uC544\u00B7\uC0AC\uB78C\uC778\uC5D0\uC11C<br/>G\uBC38\uB9AC \uAE30\uC5C5 \uAC80\uC0C9</div>
+        </div>
+        <div style="background:#1A1236;border-radius:10px;padding:14px 16px;border:1px solid rgba(34,197,94,0.25);">
+          <div style="font-size:19px;margin-bottom:6px;">\uD83C\uDFAA</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">G\uBC38\uB9AC \uCC44\uC6A9\uBC15\uB78C\uD68C</div>
+          <div style="font-size:12px;color:#8B88AA;line-height:1.6;">\uC5F0 1~2\uD68C \uAC1C\uCD5C<br/>1\uB3001 \uC0C1\uB2F4 \uB9E4\uCE6D \uC9C0\uC6D0</div>
+        </div>
+        <div style="background:#1A1236;border-radius:10px;padding:14px 16px;border:1px solid rgba(96,165,250,0.25);">
+          <div style="font-size:19px;margin-bottom:6px;">\uD83C\uDF10</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">\uAE30\uC5C5 \uD648\uD398\uC774\uC9C0</div>
+          <div style="font-size:12px;color:#8B88AA;line-height:1.6;">\uAD00\uC2EC \uAE30\uC5C5 \uD648\uD398\uC774\uC9C0<br/>\uCC44\uC6A9\uAD8C \uC9C1\uC811 \uC9C0\uC6D0</div>
+        </div>
+        <div style="background:#1A1236;border-radius:10px;padding:14px 16px;border:1px solid rgba(245,158,11,0.25);">
+          <div style="font-size:19px;margin-bottom:6px;">\uD83D\uDCCD</div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">굿잡 G밸리</div>
+          <div style="font-size:12px;color:#8B88AA;line-height:1.6;">G\uBC38\uB9AC \uC804\uC6A9<br/>\uCDE8\uC5C5 \uD3EC\uD130 \uD65C\uC6A9</div>
+        </div>
+      </div>
     </div>
   </div>`;
 }
@@ -858,11 +832,11 @@ function slide_qa() {
   return `
   <div id="s-qa">
     <div class="qa-circle">
-      <span style="font-size:64px;font-weight:900;color:#fff">Q&A</span>
+      <span style="font-size:78px;font-weight:900;color:#fff">Q&A</span>
     </div>
-    <p style="font-size:20px;color:${C.purpleL};margin-bottom:32px">궁금하신 점이 있다면 편하게 질문해 주세요.</p>
+    <p style="font-size:24px;color:${C.purpleL};margin-bottom:32px">궁금하신 점이 있다면 편하게 질문해 주세요.</p>
     <div style="width:200px;height:3px;background:${C.purple};border-radius:2px;margin-bottom:24px"></div>
-    <p style="color:${C.muted};font-size:14px">Team Persona-frame</p>
+    <p style="color:${C.muted};font-size:18px">Team AI-Purby</p>
   </div>`;
 }
 
